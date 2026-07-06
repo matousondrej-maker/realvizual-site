@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealVizual – Prezentace nemovitostí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1c1c1c;
+    --darker: #141414;
+    --surface: #242424;
+    --surface2: #2c2c2c;
+    --accent: #1a7ab5;
+    --accent-light: #41bfef;
+    --white: #ffffff;
+    --muted: #999;
+    --border: rgba(26,122,181,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(20,20,20,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo { height: 44px; cursor: pointer; }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.25s;
+    cursor: pointer;
+  }
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--accent); }
+
+  .nav-cta {
+    border: 1px solid var(--accent);
+    color: var(--accent) !important;
+    padding: 8px 20px;
+    transition: background 0.25s, color 0.25s !important;
+  }
+  .nav-cta:hover {
+    background: var(--accent) !important;
+    color: var(--white) !important;
+  }
+
+  /* hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--white);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+
+  /* mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: var(--darker);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    text-decoration: none;
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  section { display: none; }
+  section.active { display: block; }
+
+  /* ── HERO ── */
+  #uvod {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  #uvod.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(8,8,8,0.7) 0%, rgba(8,8,8,0.4) 40%, rgba(8,8,8,0.85) 100%),
+      url('img/foto1.jpg') center/cover no-repeat;
+  }
+
+  .hero-content {
+    position: relative;
+    padding: 0 60px;
+    max-width: 800px;
+    margin-top: 140px;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+  .hero-title em { font-style: italic; color: var(--accent-light); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.25s, color 0.25s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .clients {
+    position: absolute;
+    bottom: 60px; left: 0; right: 0;
+    padding: 0 60px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .clients-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .clients-logos { display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
+  .client-logo { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.35); font-weight: 500; transition: color 0.2s; }
+  .client-logo:hover { color: var(--accent); }
+
+  /* services grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+  .service-card {
+    background: var(--surface);
+    padding: 56px 48px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover { background: var(--surface2); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-number { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--border); line-height: 1; margin-bottom: 24px; }
+  .service-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--white); margin-bottom: 16px; }
+  .service-desc { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
+  .service-link { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: gap 0.2s; }
+  .service-link:hover { gap: 14px; }
+  .service-link::after { content: '→'; }
+
+  /* page header */
+  .page-header { padding: 160px 60px 80px; border-bottom: 1px solid var(--border); position: relative; }
+  .page-header::before { content: attr(data-label); position: absolute; top: 120px; right: 60px; font-family: 'Cormorant Garamond', serif; font-size: 120px; font-weight: 300; color: rgba(26,122,181,0.04); pointer-events: none; line-height: 1; }
+  .page-tag { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 300; color: var(--white); line-height: 1.1; }
+  .page-perex { margin-top: 24px; max-width: 640px; font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8; }
+
+  /* gallery */
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; }
+  .gallery-item { position: relative; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.4s; filter: brightness(0.9); }
+  .gallery-item:hover img { transform: scale(1.05); filter: brightness(1); }
+  .gallery-item-overlay { display: none; }
+  .gallery-caption { display: none; }
+
+  /* video */
+  .video-grid { display: grid; grid-template-columns: 1fr; gap: 3px; padding: 3px; }
+  .video-item { background: var(--surface); }
+  .video-placeholder { width: 100%; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; cursor: pointer; background-size: cover; background-position: center; position: relative; }
+  .video-overlay { position: absolute; inset: 0; background: rgba(8,8,8,0.55); transition: background 0.3s; }
+  .video-placeholder:hover .video-overlay { background: rgba(8,8,8,0.35); }
+  .play-btn { position: relative; z-index: 1; width: 64px; height: 64px; border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.25s; }
+  .video-placeholder:hover .play-btn { background: var(--accent); }
+  .play-btn svg { margin-left: 4px; }
+  .video-meta { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .video-title { font-size: 14px; color: var(--white); letter-spacing: 0.05em; }
+  .video-tag { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+
+  /* reels */
+  .reels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; }
+  .reel-item { background: var(--surface); }
+  .reel-placeholder { width: 100%; aspect-ratio: 9/16; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; cursor: pointer; position: relative; overflow: hidden; }
+  .reel-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.4s; }
+  .reel-placeholder:hover .reel-bg { opacity: 0.6; }
+  .reel-play { position: relative; z-index: 1; width: 56px; height: 56px; border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.25s; }
+  .reel-placeholder:hover .reel-play { background: var(--accent); }
+  .reel-play svg { margin-left: 3px; }
+  .reel-meta { position: relative; z-index: 1; text-align: center; }
+  .reel-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-light); }
+  .reel-sub { padding: 16px 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+
+  /* floor plans */
+  .plans-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 3px; }
+  .plan-item { background: var(--surface); display: flex; flex-direction: column; }
+  .plan-placeholder { width: 100%; aspect-ratio: 4/3; background: #111; display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .plan-svg { width: 100%; max-height: 200px; opacity: 0.35; transition: opacity 0.3s; }
+  .plan-item:hover .plan-svg { opacity: 0.6; }
+  .plan-meta { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .plan-name { font-size: 14px; color: var(--white); }
+  .plan-area { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--accent); }
+
+  /* contact */
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 70vh; }
+  .contact-info { padding: 80px 60px; border-right: 1px solid var(--border); }
+  .contact-item { margin-bottom: 48px; }
+  .contact-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .contact-value { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--white); text-decoration: none; display: block; transition: color 0.2s; }
+  a.contact-value:hover { color: var(--accent); }
+  .contact-form { padding: 80px 60px; }
+  .form-group { margin-bottom: 28px; }
+  .form-label { display: block; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .form-input, .form-textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--white); padding: 14px 18px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.25s; }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { height: 120px; resize: vertical; }
+
+  /* footer */
+  footer { background: var(--darker); border-top: 1px solid var(--border); padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; cursor: pointer; }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* lightbox */
+  .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close { position: absolute; top: 24px; right: 32px; font-size: 32px; color: var(--muted); cursor: pointer; background: none; border: none; line-height: 1; transition: color 0.2s; }
+  .lightbox-close:hover { color: var(--white); }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 24px; margin-top: 120px; }
+    .clients { padding: 0 24px; bottom: 40px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .reels-grid { grid-template-columns: 1fr; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .contact-info { border-right: none; border-bottom: 1px solid var(--border); padding: 60px 24px; }
+    .contact-form { padding: 60px 24px; }
+    .page-header { padding: 120px 24px 60px; }
+    .page-header::before { display: none; }
+    footer { padding: 32px 24px; }
+  }
+  @media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-title    { animation: fadeUp 0.7s 0.1s  ease both; }
+  .hero-sub      { animation: fadeUp 0.7s 0.25s ease both; }
+  .hero-actions  { animation: fadeUp 0.7s 0.4s  ease both; }
+
+  /* ── QUOTE / CALCULATOR ── */
+  .quote-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3px;
+    padding: 3px;
+    align-items: start;
+  }
+  .quote-form {
+    background: var(--surface);
+    padding: 56px 48px;
+  }
+  .form-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .addr-status {
+    margin-top: 6px;
+    font-size: 12px;
+    min-height: 18px;
+    transition: color 0.2s;
+  }
+  .addr-status.ok      { color: var(--accent-light); }
+  .addr-status.error   { color: #e06060; }
+  .addr-status.warn    { color: #e0a040; }
+  .addr-status.loading { color: var(--muted); }
+  .form-hint { font-size: 10px; letter-spacing: 0.05em; color: var(--muted); text-transform: none; }
+
+  /* services checkboxes */
+  .services-check { display: flex; flex-direction: column; gap: 3px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface2);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .check-item:hover { background: #333; }
+  .check-item input[type="checkbox"] { display: none; }
+  .check-box {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .check-item input:checked ~ .check-box {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check-item input:checked ~ .check-box::after { content: "✓"; font-size: 12px; color: #fff; }
+  .check-body { display: flex; justify-content: space-between; align-items: center; flex: 1; }
+  .check-name { font-size: 14px; color: var(--white); }
+  .check-note { font-size: 11px; color: var(--muted); margin-left: 8px; }
+  .check-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent); }
+
+  .floors-row {
+    display: none;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    background: #1a1a2e;
+    border-left: 2px solid var(--accent);
+  }
+  .floors-stepper { display: flex; align-items: center; gap: 16px; }
+  .floors-stepper button {
+    width: 32px; height: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+  }
+  .floors-stepper button:hover { background: var(--accent); border-color: var(--accent); }
+  .floors-stepper span { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--white); min-width: 24px; text-align: center; }
+
+  .form-error { color: #e06060; font-size: 13px; }
+
+  /* summary card */
+  .quote-summary { position: sticky; top: 90px; }
+  .summary-card {
+    background: var(--surface);
+    padding: 36px 32px;
+    border-top: 2px solid var(--accent);
+  }
+  .summary-title { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .summary-lines { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .summary-line { display: flex; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.75); gap: 12px; }
+  .summary-line span:last-child { white-space: nowrap; color: var(--white); }
+  .summary-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+  .summary-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+  .summary-total-block { margin-bottom: 20px; }
+  .summary-total-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .summary-total-price { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--white); line-height: 1; }
+  .summary-total-vat { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .summary-transport { display: flex; align-items: flex-start; gap: 10px; background: var(--surface2); padding: 14px 16px; margin-bottom: 20px; font-size: 13px; color: rgba(255,255,255,0.6); }
+  .summary-transport .transport-icon { font-size: 16px; flex-shrink: 0; }
+  .summary-note { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 4px; }
+
+  .contact-aside {
+    background: var(--darker);
+    padding: 32px;
+    margin-top: 3px;
+  }
+  .contact-aside .contact-item { margin-bottom: 28px; }
+  .contact-aside .contact-item:last-child { margin-bottom: 0; }
+
+  /* thank you */
+  .thankyou {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 40px;
+  }
+  .thankyou-icon { font-size: 56px; color: var(--accent); margin-bottom: 24px; }
+  .thankyou h2 { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; margin-bottom: 20px; }
+  .thankyou p { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 480px; margin: 0 auto; line-height: 1.8; }
+
+  @media (max-width: 900px) {
+    .quote-layout { grid-template-columns: 1fr; }
+    .quote-form { padding: 40px 24px; }
+    .form-row { grid-template-columns: 1fr; }
+    .quote-summary { position: static; margin-top: 3px; }
+  }
+
+  .video-embed { width:100%; aspect-ratio:16/9; background:#000; }
+  .video-embed iframe { width:100%; height:100%; display:block; border:none; }
+  .reels-grid { grid-template-columns: repeat(4,1fr); }
+  .reel-embed { width:100%; aspect-ratio:9/16; background:#000; }
+  .reel-embed iframe { width:100%; height:100%; display:block; border:none; }
+  .plan-img-wrap { width:100%; aspect-ratio:4/3; overflow:hidden; background:#f0ede8; cursor:pointer; }
+  .plan-img-wrap img { width:100%; height:100%; object-fit:contain; padding:12px; transition:transform 0.4s; }
+  .plan-item:hover .plan-img-wrap img { transform:scale(1.03); }
+  @media (max-width:900px) { .reels-grid { grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px) { .reels-grid { grid-template-columns:1fr; } }
+
+
+  /* gaps between video items and plan items */
+  .video-grid { gap: 12px; padding: 12px; }
+  .plans-grid { gap: 12px; padding: 12px; }
+
+
+  /* ── CUSTOM CALENDAR ── */
+  .cal-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 12px;
+    user-select: none;
+    max-width: 320px;
+  }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-nav {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white);
+    width: 32px; height: 32px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+  }
+  .cal-nav:hover { background: var(--accent); border-color: var(--accent); }
+  .cal-month-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    text-transform: capitalize;
+  }
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+  .cal-weekdays span {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 4px 0;
+  }
+  .cal-weekdays span:nth-child(2),
+  .cal-weekdays span:nth-child(5),
+  .cal-weekdays span:nth-child(7) {
+    color: var(--accent-light);
+  }
+  .cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: default;
+    color: rgba(255,255,255,0.2);
+    background: transparent;
+    border: none;
+    transition: background 0.15s, color 0.15s;
+    max-height: 34px;
+  }
+  .cal-day.available {
+    color: var(--white);
+    cursor: pointer;
+  }
+  .cal-day.available:hover {
+    background: rgba(26,122,181,0.3);
+    color: var(--accent-light);
+  }
+  .cal-day.selected {
+    background: var(--accent) !important;
+    color: #fff !important;
+  }
+  .cal-day.past { color: rgba(255,255,255,0.1); }
+  .cal-day.empty { background: transparent; }
+  .cal-selected {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--accent-light);
+    letter-spacing: 0.05em;
+    min-height: 20px;
+  }
+
+
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    cursor: pointer;
+    user-select: none;
+  }
+  .logo-accent { color: var(--accent-light); }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="img/logo.svg" alt="RealVizual" class="logo" data-nav="uvod">
+  <ul class="nav-links">
+    <li><a data-nav="uvod" class="active">Úvod</a></li>
+    <li><a data-nav="fotografie">Fotografie</a></li>
+    <li><a data-nav="video">Video</a></li>
+    <li><a data-nav="reels">Reels</a></li>
+    <li><a data-nav="pudorys">Půdorys</a></li>
+    <li><a data-nav="kontakt" class="nav-cta">Kontakt</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a data-nav="uvod">Úvod</a>
+  <a data-nav="fotografie">Fotografie</a>
+  <a data-nav="video">Video</a>
+  <a data-nav="reels">Reels</a>
+  <a data-nav="pudorys">Půdorys</a>
+  <a data-nav="kontakt">Kontakt</a>
+</div>
+
+<!-- ÚVOD -->
+<section id="uvod">
+  <div style="min-height:100vh;position:relative;">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Prodejte <em>rychleji</em><br>a za víc</h1>
+      <p class="hero-sub">Vytvořením profesionálních prezentací nemovitostí pomáháme realitním kancelářím prodat nemovitost za vyšší cenu a rychleji.</p>
+      <div class="hero-actions">
+        <span class="btn-primary" data-nav="fotografie">Naše práce</span>
+        <span class="btn-secondary" data-nav="kontakt">Nezávazná poptávka</span>
+      </div>
+    </div>
+    <div class="clients">
+      <span class="clients-label">Spolupracujeme&nbsp;s</span>
+      <div class="clients-logos">
+        <span class="client-logo">Bidli</span>
+        <span class="client-logo">Century 21</span>
+        <span class="client-logo">Prosperity</span>
+        <span class="client-logo">Broker Trust</span>
+        <span class="client-logo">RE/MAX</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOTOGRAFIE -->
+<section id="fotografie">
+  <div class="page-header" data-label="Foto">
+    <div class="page-tag">Naše práce</div>
+    <h1 class="page-title">Fotografie<br>nemovitostí</h1>
+    <p class="page-perex">Fotografie jsou základ, ale dobrý fotograf není samozřejmostí. Je potřeba mít to správné oko na kompozici a ukázat nemovitost z těch nejlepších úhlů. Díky tomu zaměříme pozornost zájemce přesně tam, kam potřebujeme, a k nemovitosti si již podle fotek vytvoří pozitivní emoce.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item" data-lightbox><img src="img/foto1.jpg" alt="Exteriér – dron"><div class="gallery-item-overlay"><span class="gallery-caption">Exteriér – dron</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto2.jpg" alt="Exteriér – západ slunce"><div class="gallery-item-overlay"><span class="gallery-caption">Exteriér – západ slunce</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto3.jpg" alt="Koupelna"><div class="gallery-item-overlay"><span class="gallery-caption">Koupelna</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto4.jpg" alt="Bazén"><div class="gallery-item-overlay"><span class="gallery-caption">Bazén</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto5.jpg" alt="Obývací pokoj"><div class="gallery-item-overlay"><span class="gallery-caption">Obývací pokoj</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto6.jpg" alt="Interiér – detail"><div class="gallery-item-overlay"><span class="gallery-caption">Interiér – detail</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto7.jpg" alt="Koupelna luxus"><div class="gallery-item-overlay"><span class="gallery-caption">Koupelna luxus</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto8.jpg" alt="Jídelna"><div class="gallery-item-overlay"><span class="gallery-caption">Jídelna</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto9.jpg" alt="Wellness"><div class="gallery-item-overlay"><span class="gallery-caption">Wellness</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto10.jpg" alt="Exteriér – zámek"><div class="gallery-item-overlay"><span class="gallery-caption">Exteriér – zámek</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto11.jpg" alt="Interiér – pohled shora"><div class="gallery-item-overlay"><span class="gallery-caption">Interiér – pohled shora</span></div></div>
+    <div class="gallery-item" data-lightbox><img src="img/foto12.jpg" alt="Obývací pokoj – výhled"><div class="gallery-item-overlay"><span class="gallery-caption">Obývací pokoj – výhled</span></div></div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="page-header" data-label="Video">
+    <div class="page-tag">Naše práce</div>
+    <h1 class="page-title">Videoprohlídky<br>nemovitostí</h1>
+    <p class="page-perex">Video musí pracovat s emocí, s hlasem makléře a s příběhem nemovitosti. Krom samotné prezentace prostor slouží videoprohlídka také jako skvělý nástroj propagace makléře samotného.</p>
+  </div>
+  <div class="video-grid">
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/KrReu1unP-I" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/HPqmiXSYI14" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/vhdHGTT_YLc" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/dxmRzJIBKd0" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/I6f3z9_1cQ8" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/2GlXtp9AQbE" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+  </div>
+</section>
+
+<!-- REELS -->
+<section id="reels">
+  <div class="page-header" data-label="Reels">
+    <div class="page-tag">Sociální sítě</div>
+    <h1 class="page-title">Reels &amp;<br>krátká videa</h1>
+    <p class="page-perex">Krátký vertikální obsah pro Instagram, Facebook a TikTok. Ideální formát pro rychlé oslovení co největšího počtu potenciálních kupujících na sociálních sítích – tam, kde tráví čas každý den.</p>
+  </div>
+  <div class="reels-grid">
+    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/0Hcgyhrly1c" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/4lohk9yCQ-Q" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/6tah0KvQj0M" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/is_6fDOfCec" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+  </div>
+</section>
+
+<!-- PŮDORYS -->
+<section id="pudorys">
+  <div class="page-header" data-label="Půdorys">
+    <div class="page-tag">Naše práce</div>
+    <h1 class="page-title">Půdorysy<br>nemovitostí</h1>
+    <p class="page-perex">Přehledné půdorysy pomáhají kupujícím okamžitě pochopit dispozici a prostorové vztahy ještě před fyzickou prohlídkou. Jsou neodmyslitelnou součástí každé profesionální prezentace nemovitosti.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-item" data-lightbox><div class="plan-img-wrap"><img src="img/pudorys1.jpg" alt="Půdorys 1"></div></div>
+    <div class="plan-item" data-lightbox><div class="plan-img-wrap"><img src="img/pudorys2.jpg" alt="Půdorys 2"></div></div>
+    <div class="plan-item" data-lightbox><div class="plan-img-wrap"><img src="img/pudorys3.jpg" alt="Půdorys 3"></div></div>
+    <div class="plan-item" data-lightbox><div class="plan-img-wrap"><img src="img/pudorys4.jpg" alt="Půdorys 4"></div></div>
+  </div>
+</section>
+
+
+<!-- POPTÁVKA / KALKULAČKA -->
+<section id="kontakt">
+  <div class="page-header" data-label="Kontakt">
+    <div class="page-tag">Spojte se s námi</div>
+    <h1 class="page-title">Nezávazná<br>poptávka</h1>
+    <p class="page-perex">Vyplňte formulář a my se vám co nejdříve ozveme s potvrzením termínu. Cena se vypočítá automaticky podle vybraných služeb a vzdálenosti nemovitosti od Brna.</p>
+  </div>
+
+  <div class="quote-layout">
+
+    <!-- Hidden Netlify form for spam detection -->
+    <form name="poptavka" netlify netlify-honeypot="bot-field" hidden>
+      <input name="Jméno"/><input name="Telefon"/><input name="Email"/>
+      <input name="Datum"/><input name="Adresa"/><input name="Služby"/>
+      <input name="Vzdálenost"/><input name="Cena bez DPH"/><input name="Cena s DPH"/><input name="Poznámka"/>
+    </form>
+    <!-- LEFT: form -->
+    <div class="quote-form">
+
+      <div class="form-section-title">Kontaktní údaje</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="q-name">Jméno a příjmení *</label>
+          <input id="q-name" type="text" class="form-input" placeholder="Jan Novák">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="q-tel">Telefon *</label>
+          <input id="q-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="q-email">E-mail *</label>
+        <input id="q-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
+      </div>
+
+      <div class="form-section-title" style="margin-top:36px;">Termín a místo</div>
+      <div class="form-group">
+        <label class="form-label">Preferované datum * <span class="form-hint">Dostupné termíny: úterý, pátek, neděle</span></label>
+        <div class="cal-wrap" id="calWrap">
+          <div class="cal-header">
+            <button type="button" class="cal-nav" id="calPrev">&#8249;</button>
+            <span class="cal-month-label" id="calMonthLabel"></span>
+            <button type="button" class="cal-nav" id="calNext">&#8250;</button>
+          </div>
+          <div class="cal-weekdays">
+            <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span>So</span><span>Ne</span>
+          </div>
+          <div class="cal-days" id="calDays"></div>
+        </div>
+        <div class="cal-selected" id="calSelected">Datum nevybráno</div>
+        <input type="hidden" id="q-date" value="">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="q-addr">Adresa nemovitosti *</label>
+        <input id="q-addr" type="text" class="form-input" placeholder="Náměstí Svobody 1, Praha 1" autocomplete="off">
+        <div id="addr-status" class="addr-status"></div>
+      </div>
+
+      <div class="form-section-title" style="margin-top:36px;">Rozsah služeb</div>
+      <div class="services-check">
+        <label class="check-item">
+          <input type="checkbox" id="svc-foto" value="foto">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Fotografie <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">4 300 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-video" value="video">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Video <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">9 700 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-reels" value="reels">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Reels</span>
+            <span class="check-price">9 700 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-pudorys" value="pudorys">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Půdorysy <span class="check-note">850 Kč / patro</span></span>
+            <span class="check-price" id="pudorys-price">850 Kč</span>
+          </span>
+        </label>
+        <div class="floors-row" id="floors-row">
+          <label class="form-label" for="q-floors">Počet podlaží</label>
+          <div class="floors-stepper">
+            <button type="button" id="floors-minus">−</button>
+            <span id="floors-val">1</span>
+            <button type="button" id="floors-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:28px;">
+        <label class="form-label" for="q-note">Poznámka</label>
+        <textarea id="q-note" class="form-textarea" placeholder="Cokoli, co nám chcete sdělit předem…"></textarea>
+      </div>
+
+      <button id="submitBtn" class="btn-primary" type="button" style="margin-top:8px;width:100%;padding:18px;">Odeslat poptávku</button>
+      <p id="form-error" class="form-error" style="display:none;margin-top:12px;"></p>
+    </div>
+
+    <!-- RIGHT: price summary -->
+    <div class="quote-summary">
+      <div class="summary-card">
+        <div class="summary-title">Předběžná kalkulace</div>
+
+        <div class="summary-lines" id="summary-lines">
+          <div class="summary-empty">Vyberte služby a adresu nemovitosti.</div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-total-block">
+          <div class="summary-total-label">Celkem bez DPH</div>
+          <div class="summary-total-price" id="total-ex">— Kč</div>
+          <div class="summary-total-vat" id="total-inc">— Kč vč. DPH (21 %)</div>
+        </div>
+
+        <div class="summary-transport" id="transport-info" style="display:none;">
+          <div class="transport-icon">🚗</div>
+          <div id="transport-text"></div>
+        </div>
+
+        <div class="summary-note">
+          Ceny jsou orientační a bez DPH, pokud není uvedeno jinak. Finální cenu potvrdíme v nabídce.
+        </div>
+      </div>
+
+      <!-- contact info below summary -->
+      <div class="contact-aside">
+        <div class="contact-item">
+          <div class="contact-label">Telefon</div>
+          <a class="contact-value" href="tel:+420605207392">+420 605 207 392</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">E-mail</div>
+          <a class="contact-value" href="mailto:info@indigofilms.cz">info@indigofilms.cz</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Sídlo</div>
+          <span class="contact-value" style="font-size:16px;color:var(--muted);">Heršpická 813/5, Brno<br>M-Palác, 13. patro</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2024 RealVizual / IFVP s.r.o. Všechna práva vyhrazena.</span>
+  <div class="footer-links">
+    <a>Cookies</a>
+    <a>Ochrana osobních údajů</a>
+    <a data-nav="kontakt">Kontakt</a>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- Google Maps API — sem doplňte svůj klíč -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDxHqP24hATKgb92R4Yr8LkN43NVuCIx8&libraries=places&callback=initMaps" async defer></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ══════════════════════════════════════
+     KONFIGURACE — upravte dle potřeby
+  ══════════════════════════════════════ */
+  var CONFIG = {
+    origin:      'Heršpická 813/5, Brno, Czech Republic',
+    kmPrice:     6,        // Kč za každý ujetý km (tam i zpět)
+    vatRate:     0.21,
+    notifyEmail: 'matous.ondrej@gmail.com',
+    services: {
+      foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
+      video:   { label: 'Video (vč. dronu)',      price: 9700 },
+      reels:   { label: 'Reels',                  price: 9700 },
+      pudorys: { label: 'Půdorysy',               pricePerFloor: 850 }
+    }
+  };
+
+  /* ══════════════════════════════════════
+     STATE
+  ══════════════════════════════════════ */
+  var state = {
+    floors: 1,
+    distanceKm: null,
+    distanceText: '',
+    geocoding: false
+  };
+
+  /* ══════════════════════════════════════
+     NAVIGATION
+  ══════════════════════════════════════ */
+  function showPage(id) {
+    document.querySelectorAll('section').forEach(function (s) { s.classList.remove('active'); });
+    var el = document.getElementById(id);
+    if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+    document.querySelectorAll('.nav-links [data-nav]').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-nav') === id);
+    });
+    document.getElementById('mobileMenu').classList.remove('open');
+    if (id === 'kontakt') { setTimeout(attachAutocomplete, 100); }
+  }
+
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest('[data-nav]');
+    if (target) { e.preventDefault(); showPage(target.getAttribute('data-nav')); }
+  });
+
+  document.getElementById('hamburger').addEventListener('click', function () {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+
+  /* ══════════════════════════════════════
+     LIGHTBOX
+  ══════════════════════════════════════ */
+  document.querySelectorAll('[data-lightbox]').forEach(function (item) {
+    item.addEventListener('click', function () {
+      var img = item.querySelector('img');
+      if (img) { document.getElementById('lightboxImg').src = img.src; document.getElementById('lightbox').classList.add('open'); }
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', function () { document.getElementById('lightbox').classList.remove('open'); });
+  document.getElementById('lightbox').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); });
+
+  /* ══════════════════════════════════════
+     DATE PICKER — only Tue/Fri/Sun
+  ══════════════════════════════════════ */
+  // ── CUSTOM CALENDAR
+  var calState = { year: 0, month: 0 };
+  var CZ_MONTHS = ['Leden','Únor','Březen','Duben','Květen','Červen',
+                   'Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+
+  function renderCalendar(year, month) {
+    calState.year = year; calState.month = month;
+    document.getElementById('calMonthLabel').textContent = CZ_MONTHS[month] + ' ' + year;
+    var today = new Date(); today.setHours(0,0,0,0);
+    var tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+    var firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+    // Convert to Mon-first: Mon=0..Sun=6
+    var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var html = '';
+    for (var i = 0; i < startOffset; i++) html += '<div class="cal-day empty"></div>';
+    for (var d = 1; d <= daysInMonth; d++) {
+      var date = new Date(year, month, d);
+      var dow = date.getDay(); // 0=Sun,2=Tue,5=Fri
+      var isAvail = (dow === 0 || dow === 2 || dow === 5) && date >= tomorrow;
+      var isPast  = date < tomorrow;
+      var selVal  = document.getElementById('q-date').value;
+      var thisVal = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+      var cls = 'cal-day';
+      if (isAvail) cls += ' available';
+      else if (isPast) cls += ' past';
+      if (selVal === thisVal) cls += ' selected';
+      html += '<div class="' + cls + '" data-date="' + thisVal + '">' + d + '</div>';
+    }
+    document.getElementById('calDays').innerHTML = html;
+    // bind clicks
+    document.querySelectorAll('#calDays .cal-day.available').forEach(function(el) {
+      el.addEventListener('click', function() {
+        document.getElementById('q-date').value = this.dataset.date;
+        var parts = this.dataset.date.split('-');
+        var months = ['ledna','února','března','dubna','května','června',
+                      'července','srpna','září','října','listopadu','prosince'];
+        var dayNames = ['neděle','pondělí','úterý','středa','čtvrtek','pátek','sobota'];
+        var dt = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+        document.getElementById('calSelected').textContent =
+          '✓ ' + dayNames[dt.getDay()] + ' ' + parseInt(parts[2]) + '. ' + months[parseInt(parts[1])-1] + ' ' + parts[0];
+        renderCalendar(calState.year, calState.month);
+      });
+    });
+  }
+
+  // Init calendar to next month if current has few days left
+  var initDate = new Date(); initDate.setDate(initDate.getDate() + 1);
+  renderCalendar(initDate.getFullYear(), initDate.getMonth());
+
+  document.getElementById('calPrev').addEventListener('click', function() {
+    var d = new Date(calState.year, calState.month - 1, 1);
+    var today = new Date();
+    if (d.getFullYear() < today.getFullYear() || (d.getFullYear() === today.getFullYear() && d.getMonth() < today.getMonth())) return;
+    renderCalendar(d.getFullYear(), d.getMonth());
+  });
+  document.getElementById('calNext').addEventListener('click', function() {
+    var d = new Date(calState.year, calState.month + 1, 1);
+    renderCalendar(d.getFullYear(), d.getMonth());
+  });
+
+  /* ══════════════════════════════════════
+     FLOORS STEPPER
+  ══════════════════════════════════════ */
+  var pudorysCheck = document.getElementById('svc-pudorys');
+  var floorsRow    = document.getElementById('floors-row');
+
+  pudorysCheck.addEventListener('change', function () {
+    floorsRow.style.display = this.checked ? 'flex' : 'none';
+    updateSummary();
+  });
+
+  document.getElementById('floors-minus').addEventListener('click', function () {
+    if (state.floors > 1) { state.floors--; document.getElementById('floors-val').textContent = state.floors; updateSummary(); }
+  });
+  document.getElementById('floors-plus').addEventListener('click', function () {
+    if (state.floors < 10) { state.floors++; document.getElementById('floors-val').textContent = state.floors; updateSummary(); }
+  });
+
+  /* ══════════════════════════════════════
+     SERVICE CHECKBOXES → update summary
+  ══════════════════════════════════════ */
+  ['svc-foto','svc-video','svc-reels','svc-pudorys'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', updateSummary);
+  });
+
+  /* ══════════════════════════════════════
+     GOOGLE MAPS — DISTANCE
+  ══════════════════════════════════════ */
+  var geocodeTimer = null;
+  var addrInput    = document.getElementById('q-addr');
+  var addrStatus   = document.getElementById('addr-status');
+
+  // Called by Maps API after load
+  // Attach autocomplete once — called either by Maps callback or lazily
+  var acAttached = false;
+  function attachAutocomplete() {
+    if (acAttached) return;
+    if (!window.google || !window.google.maps || !window.google.maps.places) return;
+    acAttached = true;
+    try {
+      var ac = new google.maps.places.Autocomplete(addrInput, {
+        componentRestrictions: { country: 'cz' },
+        fields: ['formatted_address', 'geometry']
+      });
+      ac.addListener('place_changed', function () {
+        var place = ac.getPlace();
+        if (place && place.geometry) {
+          calculateDistance(place.formatted_address);
+        }
+      });
+    } catch(e) { /* autocomplete not critical */ }
+  }
+
+  window.initMaps = function () {
+    attachAutocomplete();
+  };
+
+  addrInput.addEventListener('input', function () {
+    state.distanceKm = null;
+    state.distanceText = '';
+    addrStatus.textContent = '';
+    addrStatus.className = 'addr-status';
+    updateSummary();
+    clearTimeout(geocodeTimer);
+    var val = this.value.trim();
+    if (val.length > 8) {
+      geocodeTimer = setTimeout(function () { calculateDistance(val); }, 1200);
+    }
+  });
+
+  function calculateDistance(address) {
+    // If Google Maps not loaded (no API key yet), use straight-line fallback notice
+    if (!window.google || !window.google.maps) {
+      addrStatus.textContent = '⚠ Pro výpočet vzdálenosti doplňte Google Maps API klíč.';
+      addrStatus.className = 'addr-status warn';
+      return;
+    }
+
+    addrStatus.textContent = 'Počítám vzdálenost…';
+    addrStatus.className = 'addr-status loading';
+
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix({
+      origins:      [CONFIG.origin],
+      destinations: [address],
+      travelMode:   google.maps.TravelMode.DRIVING,
+      unitSystem:   google.maps.UnitSystem.METRIC,
+      language:     'cs'
+    }, function (response, status) {
+      if (status === 'OK') {
+        var element = response.rows[0].elements[0];
+        if (element.status === 'OK') {
+          var oneWayM  = element.distance.value;          // metres one way
+          var totalKm  = Math.round((oneWayM * 2) / 1000); // round trip km
+          state.distanceKm   = totalKm;
+          state.distanceText = element.distance.text;
+          addrStatus.textContent = '✓ ' + element.distance.text + ' (jedna cesta) – doprava tam a zpět: ' + totalKm + ' km';
+          addrStatus.className = 'addr-status ok';
+        } else {
+          addrStatus.textContent = 'Adresu se nepodařilo najít. Zkontrolujte prosím zadání.';
+          addrStatus.className = 'addr-status error';
+          state.distanceKm = null;
+        }
+      } else {
+        addrStatus.textContent = 'Chyba při výpočtu vzdálenosti.';
+        addrStatus.className = 'addr-status error';
+        state.distanceKm = null;
+      }
+      updateSummary();
+    });
+  }
+
+  /* ══════════════════════════════════════
+     PRICE CALCULATION & SUMMARY UPDATE
+  ══════════════════════════════════════ */
+  function fmt(n) {
+    return n.toLocaleString('cs-CZ') + ' Kč';
+  }
+
+  function updateSummary() {
+    var lines  = [];
+    var total  = 0;
+
+    // Services
+    var svcMap = { foto: 'svc-foto', video: 'svc-video', reels: 'svc-reels', pudorys: 'svc-pudorys' };
+    Object.keys(svcMap).forEach(function (key) {
+      if (document.getElementById(svcMap[key]).checked) {
+        var svc = CONFIG.services[key];
+        var price;
+        if (key === 'pudorys') {
+          price = svc.pricePerFloor * state.floors;
+          lines.push({ label: svc.label + ' (' + state.floors + (state.floors === 1 ? ' patro' : state.floors < 5 ? ' patra' : ' pater') + ')', price: price });
+          // update checkbox price label
+          document.getElementById('pudorys-price').textContent = fmt(price);
+        } else {
+          price = svc.price;
+          lines.push({ label: svc.label, price: price });
+        }
+        total += price;
+      }
+    });
+
+    // Transport
+    var transportEl = document.getElementById('transport-info');
+    var transportText = document.getElementById('transport-text');
+    if (state.distanceKm !== null && total > 0) {
+      var transportCost = state.distanceKm * CONFIG.kmPrice;
+      total += transportCost;
+      lines.push({ label: 'Doprava (' + state.distanceKm + ' km × ' + CONFIG.kmPrice + ' Kč)', price: transportCost });
+      transportEl.style.display = 'flex';
+      transportText.innerHTML = state.distanceText + ' jedním směrem &mdash; doprava tam a zpět <strong>' + state.distanceKm + ' km</strong>';
+    } else {
+      transportEl.style.display = 'none';
+    }
+
+    // Render lines
+    var linesEl = document.getElementById('summary-lines');
+    if (lines.length === 0) {
+      linesEl.innerHTML = '<div class="summary-empty">Vyberte služby a adresu nemovitosti.</div>';
+      document.getElementById('total-ex').textContent = '— Kč';
+      document.getElementById('total-inc').textContent = '— Kč vč. DPH (21 %)';
+      return;
+    }
+
+    linesEl.innerHTML = lines.map(function (l) {
+      return '<div class="summary-line"><span>' + l.label + '</span><span>' + fmt(l.price) + '</span></div>';
+    }).join('');
+
+    var totalVat = Math.round(total * (1 + CONFIG.vatRate));
+    document.getElementById('total-ex').textContent  = fmt(total);
+    document.getElementById('total-inc').textContent = fmt(totalVat) + ' vč. DPH (21 %)';
+  }
+
+  /* ══════════════════════════════════════
+     FORM SUBMIT — Netlify Forms
+  ══════════════════════════════════════ */
+  document.getElementById('submitBtn').addEventListener('click', function () {
+    var name  = document.getElementById('q-name').value.trim();
+    var tel   = document.getElementById('q-tel').value.trim();
+    var email = document.getElementById('q-email').value.trim();
+    var date  = document.getElementById('q-date').value;
+    var addr  = document.getElementById('q-addr').value.trim();
+    var note  = document.getElementById('q-note').value.trim();
+    var errEl = document.getElementById('form-error');
+
+    // Validate
+    var services = [];
+    if (document.getElementById('svc-foto').checked)    services.push('Fotografie');
+    if (document.getElementById('svc-video').checked)   services.push('Video');
+    if (document.getElementById('svc-reels').checked)   services.push('Reels');
+    if (document.getElementById('svc-pudorys').checked) services.push('Půdorysy (' + state.floors + ' patr' + (state.floors===1?'o':state.floors<5?'a':'er') + ')');
+
+    if (!name || !tel || !email || !date || !addr || services.length === 0) {
+      errEl.textContent = 'Vyplňte prosím všechna povinná pole a vyberte alespoň jednu službu.';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    // Build price summary string for email
+    var totalExEl  = document.getElementById('total-ex').textContent;
+    var totalIncEl = document.getElementById('total-inc').textContent;
+
+    // Send via Netlify Forms (works automatically when deployed to Netlify)
+    var formData = new FormData();
+    formData.append('form-name',  'poptavka');
+    formData.append('Jméno',      name);
+    formData.append('Telefon',    tel);
+    formData.append('Email',      email);
+    formData.append('Datum',      date);
+    formData.append('Adresa',     addr);
+    formData.append('Služby',     services.join(', '));
+    formData.append('Vzdálenost', state.distanceKm ? state.distanceKm + ' km (tam+zpět)' : 'neuvedena');
+    formData.append('Cena bez DPH', totalExEl);
+    formData.append('Cena s DPH',   totalIncEl);
+    formData.append('Poznámka',   note);
+
+    var btn = document.getElementById('submitBtn');
+    btn.textContent = 'Odesílám…';
+    btn.disabled = true;
+
+    fetch('/', { method: 'POST', body: formData })
+      .then(function () {
+        // Success — show thank-you
+        document.querySelector('.quote-layout').innerHTML =
+          '<div class="thankyou">' +
+          '<div class="thankyou-icon">✓</div>' +
+          '<h2>Poptávka odeslána!</h2>' +
+          '<p>Děkujeme, <strong>' + name + '</strong>. Ozveme se vám co nejdříve na <strong>' + email + '</strong> nebo telefonicky na <strong>' + tel + '</strong> s potvrzením termínu.</p>' +
+          '</div>';
+      })
+      .catch(function () {
+        // Fallback if fetch fails (e.g. local preview)
+        document.querySelector('.quote-layout').innerHTML =
+          '<div class="thankyou">' +
+          '<div class="thankyou-icon">✓</div>' +
+          '<h2>Poptávka odeslána!</h2>' +
+          '<p>Děkujeme, <strong>' + name + '</strong>. Ozveme se vám co nejdříve.</p>' +
+          '</div>';
+      });
+  });
+
+  /* ── init ── */
+  showPage('uvod');
+}());
+</script>
+</body>
+</html>
