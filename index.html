@@ -396,6 +396,29 @@
   .addr-status.warn    { color: #e0a040; }
   .addr-status.loading { color: var(--muted); }
   .form-hint { font-size: 10px; letter-spacing: 0.05em; color: var(--muted); text-transform: none; }
+  .addr-group { position: relative; }
+  .addr-suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    z-index: 20;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .addr-suggestions.open { display: block; }
+  .addr-suggestion-item {
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--white);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .addr-suggestion-item:last-child { border-bottom: none; }
+  .addr-suggestion-item:hover { background: var(--surface); color: var(--accent-light); }
 
   /* services checkboxes */
   .services-check { display: flex; flex-direction: column; gap: 3px; }
@@ -799,9 +822,10 @@
         <div class="cal-selected" id="calSelected">Datum nevybráno</div>
         <input type="hidden" id="q-date" value="">
       </div>
-      <div class="form-group">
+      <div class="form-group addr-group">
         <label class="form-label" for="q-addr">Adresa nemovitosti *</label>
         <input id="q-addr" type="text" class="form-input" placeholder="Náměstí Svobody 1, Praha 1" autocomplete="off">
+        <div id="addr-suggestions" class="addr-suggestions"></div>
         <div id="addr-status" class="addr-status"></div>
       </div>
 
@@ -820,7 +844,7 @@
           <span class="check-box"></span>
           <span class="check-body">
             <span class="check-name">Video <span class="check-note">vč. dronu</span></span>
-            <span class="check-price">9 700 Kč</span>
+            <span class="check-price">10 700 Kč</span>
           </span>
         </label>
         <label class="check-item">
@@ -921,9 +945,6 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 
-<!-- Google Maps API — sem doplňte svůj klíč -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDxHqP24hATKgb92R4Yr8LkN43NVuCIx8&libraries=places&callback=initMaps" async defer></script>
-
 <script>
 (function () {
   'use strict';
@@ -933,12 +954,14 @@
   ══════════════════════════════════════ */
   var CONFIG = {
     origin:      'Heršpická 813/5, Brno, Czech Republic',
+    originLat:   49.1772663,
+    originLon:   16.6042573,
     kmPrice:     6,        // Kč za každý ujetý km (tam i zpět)
     vatRate:     0.21,
     notifyEmail: 'matous.ondrej@gmail.com',
     services: {
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
-      video:   { label: 'Video (vč. dronu)',      price: 9700 },
+      video:   { label: 'Video (vč. dronu)',      price: 10700 },
       reels:   { label: 'Reels',                  price: 4700 },
       pudorys: { label: 'Půdorysy',               pricePerFloor: 850 }
     }
@@ -965,7 +988,6 @@
       a.classList.toggle('active', a.getAttribute('data-nav') === id);
     });
     document.getElementById('mobileMenu').classList.remove('open');
-    if (id === 'kontakt') { setTimeout(attachAutocomplete, 100); }
   }
 
   document.addEventListener('click', function (e) {
@@ -1080,90 +1102,137 @@
   });
 
   /* ══════════════════════════════════════
-     GOOGLE MAPS — DISTANCE
+     DISTANCE — OpenStreetMap (Nominatim geokódování + OSRM trasa)
+     Zdarma, bez API klíče.
   ══════════════════════════════════════ */
-  var geocodeTimer = null;
-  var addrInput    = document.getElementById('q-addr');
-  var addrStatus   = document.getElementById('addr-status');
+  var addrInput       = document.getElementById('q-addr');
+  var addrStatus      = document.getElementById('addr-status');
+  var suggestBox      = document.getElementById('addr-suggestions');
+  var suggestTimer    = null;
+  var geocodeTimer    = null;
+  var selectedFromList = false;
 
-  // Called by Maps API after load
-  // Attach autocomplete once — called either by Maps callback or lazily
-  var acAttached = false;
-  function attachAutocomplete() {
-    if (acAttached) return;
-    if (!window.google || !window.google.maps || !window.google.maps.places) return;
-    acAttached = true;
-    try {
-      var ac = new google.maps.places.Autocomplete(addrInput, {
-        componentRestrictions: { country: 'cz' },
-        fields: ['formatted_address', 'geometry']
-      });
-      ac.addListener('place_changed', function () {
-        var place = ac.getPlace();
-        if (place && place.geometry) {
-          calculateDistance(place.formatted_address);
-        }
-      });
-    } catch(e) { /* autocomplete not critical */ }
+  function closeSuggestions() {
+    suggestBox.classList.remove('open');
+    suggestBox.innerHTML = '';
   }
 
-  window.initMaps = function () {
-    attachAutocomplete();
-  };
+  function renderSuggestions(results) {
+    if (!results.length) { closeSuggestions(); return; }
+    suggestBox.innerHTML = results.map(function (r, i) {
+      return '<div class="addr-suggestion-item" data-idx="' + i + '">' + r.display_name + '</div>';
+    }).join('');
+    suggestBox.classList.add('open');
+    Array.prototype.forEach.call(suggestBox.querySelectorAll('.addr-suggestion-item'), function (el) {
+      el.addEventListener('click', function () {
+        var r = results[parseInt(el.getAttribute('data-idx'), 10)];
+        selectedFromList = true;
+        addrInput.value = r.display_name;
+        closeSuggestions();
+        calculateDistance(parseFloat(r.lat), parseFloat(r.lon));
+      });
+    });
+  }
+
+  function fetchSuggestions(query) {
+    var url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=0&limit=5&countrycodes=cz&q=' + encodeURIComponent(query);
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.json(); })
+      .then(function (results) {
+        if (addrInput.value.trim() !== query) return; // odpověď na zastaralý dotaz
+        renderSuggestions(results || []);
+      })
+      .catch(function () { /* nápověda adres není kritická */ });
+  }
 
   addrInput.addEventListener('input', function () {
+    selectedFromList = false;
     state.distanceKm = null;
     state.distanceText = '';
     addrStatus.textContent = '';
     addrStatus.className = 'addr-status';
     updateSummary();
+    closeSuggestions();
+
+    clearTimeout(suggestTimer);
     clearTimeout(geocodeTimer);
     var val = this.value.trim();
-    if (val.length > 8) {
-      geocodeTimer = setTimeout(function () { calculateDistance(val); }, 1200);
-    }
+    if (val.length < 4) return;
+
+    suggestTimer = setTimeout(function () { fetchSuggestions(val); }, 400);
+    geocodeTimer = setTimeout(function () {
+      if (!selectedFromList && val.length > 8) geocodeAddress(val);
+    }, 1400);
   });
 
-  function calculateDistance(address) {
-    // If Google Maps not loaded (no API key yet), use straight-line fallback notice
-    if (!window.google || !window.google.maps) {
-      addrStatus.textContent = '⚠ Pro výpočet vzdálenosti doplňte Google Maps API klíč.';
-      addrStatus.className = 'addr-status warn';
-      return;
-    }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.addr-group')) closeSuggestions();
+  });
 
+  function geocodeAddress(address) {
     addrStatus.textContent = 'Počítám vzdálenost…';
     addrStatus.className = 'addr-status loading';
-
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins:      [CONFIG.origin],
-      destinations: [address],
-      travelMode:   google.maps.TravelMode.DRIVING,
-      unitSystem:   google.maps.UnitSystem.METRIC,
-      language:     'cs'
-    }, function (response, status) {
-      if (status === 'OK') {
-        var element = response.rows[0].elements[0];
-        if (element.status === 'OK') {
-          var oneWayM  = element.distance.value;          // metres one way
-          var totalKm  = Math.round((oneWayM * 2) / 1000); // round trip km
-          state.distanceKm   = totalKm;
-          state.distanceText = element.distance.text;
-          addrStatus.textContent = '✓ ' + element.distance.text + ' (jedna cesta) – doprava tam a zpět: ' + totalKm + ' km';
-          addrStatus.className = 'addr-status ok';
-        } else {
+    var url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=0&limit=1&countrycodes=cz&q=' + encodeURIComponent(address);
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.json(); })
+      .then(function (results) {
+        if (!results || !results.length) {
           addrStatus.textContent = 'Adresu se nepodařilo najít. Zkontrolujte prosím zadání.';
           addrStatus.className = 'addr-status error';
           state.distanceKm = null;
+          updateSummary();
+          return;
         }
-      } else {
+        calculateDistance(parseFloat(results[0].lat), parseFloat(results[0].lon));
+      })
+      .catch(function () {
         addrStatus.textContent = 'Chyba při výpočtu vzdálenosti.';
         addrStatus.className = 'addr-status error';
         state.distanceKm = null;
-      }
-      updateSummary();
-    });
+        updateSummary();
+      });
+  }
+
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function calculateDistance(destLat, destLon) {
+    addrStatus.textContent = 'Počítám vzdálenost…';
+    addrStatus.className = 'addr-status loading';
+
+    var url = 'https://router.project-osrm.org/route/v1/driving/' +
+      CONFIG.originLon + ',' + CONFIG.originLat + ';' + destLon + ',' + destLat + '?overview=false';
+
+    fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.code !== 'Ok' || !data.routes || !data.routes.length) throw new Error('no route');
+        applyDistance(data.routes[0].distance, false); // metry, jedna cesta, po silnici
+      })
+      .catch(function () {
+        // Záložní výpočet: vzdušná čára × korekční koeficient, když trasový server neodpoví
+        var straightKm = haversineKm(CONFIG.originLat, CONFIG.originLon, destLat, destLon);
+        applyDistance(straightKm * 1000 * 1.3, true);
+      });
+  }
+
+  function applyDistance(oneWayM, isEstimate) {
+    var oneWayKm   = oneWayM / 1000;
+    var totalKm    = Math.round((oneWayM * 2) / 1000);
+    var oneWayText = oneWayKm.toLocaleString('cs-CZ', { maximumFractionDigits: 1 }) + ' km';
+    state.distanceKm   = totalKm;
+    state.distanceText = oneWayText;
+    addrStatus.textContent = (isEstimate ? '≈ ' : '✓ ') + oneWayText +
+      ' (jedna cesta' + (isEstimate ? ', odhad vzdušnou čarou' : '') + ') – doprava tam a zpět: ' + totalKm + ' km';
+    addrStatus.className = 'addr-status ok';
+    updateSummary();
   }
 
   /* ══════════════════════════════════════
