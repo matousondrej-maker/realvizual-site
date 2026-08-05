@@ -505,6 +505,35 @@
   .contact-aside .contact-item { margin-bottom: 28px; }
   .contact-aside .contact-item:last-child { margin-bottom: 0; }
 
+  /* nezávazná poptávka (ceník) */
+  .request-block {
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .request-block .btn-primary { width: 100%; padding: 18px; justify-content: center; }
+  .request-hint {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 12px;
+  }
+  .request-form { display: none; margin-top: 8px; }
+  .request-form.open { display: block; }
+  .request-form .form-section-title { margin-top: 28px; }
+
+  /* fakturační údaje */
+  .contact-value-sm { font-size: 16px; color: var(--muted); line-height: 1.6; }
+  .billing {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 20px;
+    margin: 4px 0 0;
+    font-size: 14px;
+  }
+  .billing dt { color: var(--muted); }
+  .billing dd { margin: 0; color: var(--white); }
+
   /* thank you */
   .thankyou {
     grid-column: 1 / -1;
@@ -539,100 +568,6 @@
   .plans-grid { gap: 12px; padding: 12px; }
 
 
-  /* ── CUSTOM CALENDAR ── */
-  .cal-wrap {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 12px;
-    user-select: none;
-    max-width: 320px;
-  }
-  .cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .cal-nav {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--white);
-    width: 32px; height: 32px;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-    line-height: 1;
-  }
-  .cal-nav:hover { background: var(--accent); border-color: var(--accent); }
-  .cal-month-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    color: var(--white);
-    letter-spacing: 0.05em;
-    text-transform: capitalize;
-  }
-  .cal-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-    margin-bottom: 4px;
-  }
-  .cal-weekdays span {
-    text-align: center;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 4px 0;
-  }
-  .cal-weekdays span:nth-child(2),
-  .cal-weekdays span:nth-child(5),
-  .cal-weekdays span:nth-child(7) {
-    color: var(--accent-light);
-  }
-  .cal-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-  }
-  .cal-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    border-radius: 2px;
-    cursor: default;
-    color: rgba(255,255,255,0.2);
-    background: transparent;
-    border: none;
-    transition: background 0.15s, color 0.15s;
-    max-height: 34px;
-  }
-  .cal-day.available {
-    color: var(--white);
-    cursor: pointer;
-  }
-  .cal-day.available:hover {
-    background: rgba(26,122,181,0.3);
-    color: var(--accent-light);
-  }
-  .cal-day.selected {
-    background: var(--accent) !important;
-    color: #fff !important;
-  }
-  .cal-day.past { color: rgba(255,255,255,0.1); }
-  .cal-day.empty { background: transparent; }
-  .cal-selected {
-    margin-top: 10px;
-    font-size: 13px;
-    color: var(--accent-light);
-    letter-spacing: 0.05em;
-    min-height: 20px;
-  }
-
-
   .logo-text {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
@@ -657,6 +592,7 @@
     <li><a data-nav="video">Video</a></li>
     <li><a data-nav="reels">Reels</a></li>
     <li><a data-nav="pudorys">Půdorys</a></li>
+    <li><a data-nav="cenik">Ceník</a></li>
     <li><a data-nav="kontakt" class="nav-cta">Kontakt</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -671,6 +607,7 @@
   <a data-nav="video">Video</a>
   <a data-nav="reels">Reels</a>
   <a data-nav="pudorys">Půdorys</a>
+  <a data-nav="cenik">Ceník</a>
   <a data-nav="kontakt">Kontakt</a>
 </div>
 
@@ -683,7 +620,7 @@
       <p class="hero-sub">Vytvořením profesionálních prezentací nemovitostí pomáháme realitním kancelářím prodat nemovitost za vyšší cenu a rychleji.</p>
       <div class="hero-actions">
         <span class="btn-primary" data-nav="fotografie">Naše práce</span>
-        <span class="btn-secondary" data-nav="kontakt">Nezávazná poptávka</span>
+        <span class="btn-secondary" data-nav="cenik">Ceník a poptávka</span>
       </div>
     </div>
     <div class="clients">
@@ -770,12 +707,12 @@
 </section>
 
 
-<!-- POPTÁVKA / KALKULAČKA -->
-<section id="kontakt">
-  <div class="page-header" data-label="Kontakt">
-    <div class="page-tag">Spojte se s námi</div>
-    <h1 class="page-title">Nezávazná<br>poptávka</h1>
-    <p class="page-perex">Vyplňte formulář a my se vám co nejdříve ozveme s potvrzením termínu. Cena se vypočítá automaticky podle vybraných služeb a vzdálenosti nemovitosti od Brna.</p>
+<!-- CENÍK / KALKULAČKA -->
+<section id="cenik">
+  <div class="page-header" data-label="Ceník">
+    <div class="page-tag">Ceník</div>
+    <h1 class="page-title">Spočítejte si<br>cenu zakázky</h1>
+    <p class="page-perex">Vyberte služby a zadejte adresu nemovitosti — cena se spočítá automaticky včetně dopravy z Brna. Kalkulace je orientační a zcela nezávazná.</p>
   </div>
 
   <div class="quote-layout">
@@ -783,53 +720,14 @@
     <!-- Hidden Netlify form for spam detection -->
     <form name="poptavka" netlify netlify-honeypot="bot-field" hidden>
       <input name="Jméno"/><input name="Telefon"/><input name="Email"/>
-      <input name="Datum"/><input name="Adresa"/><input name="Služby"/>
+      <input name="Adresa"/><input name="Služby"/>
       <input name="Vzdálenost"/><input name="Cena bez DPH"/><input name="Cena s DPH"/><input name="Poznámka"/>
     </form>
-    <!-- LEFT: form -->
+
+    <!-- LEFT: calculator -->
     <div class="quote-form">
 
-      <div class="form-section-title">Kontaktní údaje</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="q-name">Jméno a příjmení *</label>
-          <input id="q-name" type="text" class="form-input" placeholder="Jan Novák">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="q-tel">Telefon *</label>
-          <input id="q-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="q-email">E-mail *</label>
-        <input id="q-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
-      </div>
-
-      <div class="form-section-title" style="margin-top:36px;">Termín a místo</div>
-      <div class="form-group">
-        <label class="form-label">Preferované datum * <span class="form-hint">Dostupné termíny: úterý, pátek, neděle</span></label>
-        <div class="cal-wrap" id="calWrap">
-          <div class="cal-header">
-            <button type="button" class="cal-nav" id="calPrev">&#8249;</button>
-            <span class="cal-month-label" id="calMonthLabel"></span>
-            <button type="button" class="cal-nav" id="calNext">&#8250;</button>
-          </div>
-          <div class="cal-weekdays">
-            <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span>So</span><span>Ne</span>
-          </div>
-          <div class="cal-days" id="calDays"></div>
-        </div>
-        <div class="cal-selected" id="calSelected">Datum nevybráno</div>
-        <input type="hidden" id="q-date" value="">
-      </div>
-      <div class="form-group addr-group">
-        <label class="form-label" for="q-addr">Adresa nemovitosti *</label>
-        <input id="q-addr" type="text" class="form-input" placeholder="Náměstí Svobody 1, Praha 1" autocomplete="off">
-        <div id="addr-suggestions" class="addr-suggestions"></div>
-        <div id="addr-status" class="addr-status"></div>
-      </div>
-
-      <div class="form-section-title" style="margin-top:36px;">Rozsah služeb</div>
+      <div class="form-section-title">Rozsah služeb</div>
       <div class="services-check">
         <label class="check-item">
           <input type="checkbox" id="svc-foto" value="foto">
@@ -852,15 +750,15 @@
           <span class="check-box"></span>
           <span class="check-body">
             <span class="check-name">Reels</span>
-            <span class="check-price">4 700 Kč</span>
+            <span class="check-price">5 400 Kč</span>
           </span>
         </label>
         <label class="check-item">
           <input type="checkbox" id="svc-pudorys" value="pudorys">
           <span class="check-box"></span>
           <span class="check-body">
-            <span class="check-name">Půdorysy <span class="check-note">850 Kč / patro</span></span>
-            <span class="check-price" id="pudorys-price">850 Kč</span>
+            <span class="check-name">Půdorysy <span class="check-note">900 Kč / patro</span></span>
+            <span class="check-price" id="pudorys-price">900 Kč</span>
           </span>
         </label>
         <div class="floors-row" id="floors-row">
@@ -873,13 +771,43 @@
         </div>
       </div>
 
-      <div class="form-group" style="margin-top:28px;">
-        <label class="form-label" for="q-note">Poznámka</label>
-        <textarea id="q-note" class="form-textarea" placeholder="Cokoli, co nám chcete sdělit předem…"></textarea>
+      <div class="form-section-title" style="margin-top:36px;">Místo focení</div>
+      <div class="form-group addr-group">
+        <label class="form-label" for="q-addr">Adresa nemovitosti <span class="form-hint">pro výpočet dopravy z Brna</span></label>
+        <input id="q-addr" type="text" class="form-input" placeholder="Náměstí Svobody 1, Brno" autocomplete="off">
+        <div id="addr-suggestions" class="addr-suggestions"></div>
+        <div id="addr-status" class="addr-status"></div>
       </div>
 
-      <button id="submitBtn" class="btn-primary" type="button" style="margin-top:8px;width:100%;padding:18px;">Odeslat poptávku</button>
-      <p id="form-error" class="form-error" style="display:none;margin-top:12px;"></p>
+      <!-- NEZÁVAZNÁ POPTÁVKA -->
+      <div class="request-block">
+        <button id="requestToggle" class="btn-primary" type="button">Nezávazná poptávka</button>
+        <p class="request-hint">Pošlete nám kalkulaci a my se vám ozveme s potvrzením termínu.</p>
+
+        <div class="request-form" id="requestForm">
+          <div class="form-section-title">Kontaktní údaje</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="q-name">Jméno a příjmení *</label>
+              <input id="q-name" type="text" class="form-input" placeholder="Jan Novák">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="q-tel">Telefon *</label>
+              <input id="q-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="q-email">E-mail *</label>
+            <input id="q-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="q-note">Poznámka</label>
+            <textarea id="q-note" class="form-textarea" placeholder="Termín, který by vám vyhovoval, nebo cokoli dalšího…"></textarea>
+          </div>
+          <button id="submitBtn" class="btn-primary" type="button" style="width:100%;padding:18px;">Odeslat poptávku</button>
+          <p id="form-error" class="form-error" style="display:none;margin-top:12px;"></p>
+        </div>
+      </div>
     </div>
 
     <!-- RIGHT: price summary -->
@@ -909,21 +837,83 @@
         </div>
       </div>
 
-      <!-- contact info below summary -->
       <div class="contact-aside">
         <div class="contact-item">
-          <div class="contact-label">Telefon</div>
+          <div class="contact-label">Raději zavolat?</div>
           <a class="contact-value" href="tel:+420605207392">+420 605 207 392</a>
         </div>
         <div class="contact-item">
           <div class="contact-label">E-mail</div>
           <a class="contact-value" href="mailto:info@indigofilms.cz">info@indigofilms.cz</a>
         </div>
-        <div class="contact-item">
-          <div class="contact-label">Sídlo</div>
-          <span class="contact-value" style="font-size:16px;color:var(--muted);">Heršpická 813/5, Brno<br>M-Palác, 13. patro</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="page-header" data-label="Kontakt">
+    <div class="page-tag">Spojte se s námi</div>
+    <h1 class="page-title">Kontakt</h1>
+    <p class="page-perex">Zavolejte, napište e-mail nebo použijte formulář níže. Ozveme se vám co nejdříve.</p>
+  </div>
+
+  <!-- Hidden Netlify form for spam detection -->
+  <form name="kontakt" netlify netlify-honeypot="bot-field" hidden>
+    <input name="Jméno"/><input name="Email"/><input name="Telefon"/><textarea name="Zpráva"></textarea>
+  </form>
+
+  <div class="contact-layout">
+
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-label">Telefon</div>
+        <a class="contact-value" href="tel:+420605207392">+420 605 207 392</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">E-mail</div>
+        <a class="contact-value" href="mailto:info@indigofilms.cz">info@indigofilms.cz</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Sídlo</div>
+        <span class="contact-value contact-value-sm">Heršpická 813/5, 639 00 Brno<br>M-Palác, 13. patro</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Fakturační údaje</div>
+        <dl class="billing">
+          <dt>Společnost</dt><dd>IFVP s.r.o.</dd>
+          <dt>IČ</dt><dd>06967574</dd>
+          <dt>DIČ</dt><dd>CZ06967574</dd>
+          <dt>Bankovní spojení</dt><dd>1152898002/5500</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-section-title">Napište nám</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="c-name">Jméno a příjmení *</label>
+          <input id="c-name" type="text" class="form-input" placeholder="Jan Novák">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="c-tel">Telefon</label>
+          <input id="c-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
         </div>
       </div>
+      <div class="form-group">
+        <label class="form-label" for="c-email">E-mail *</label>
+        <input id="c-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="c-msg">Zpráva *</label>
+        <textarea id="c-msg" class="form-textarea" placeholder="S čím vám můžeme pomoct?"></textarea>
+      </div>
+      <button id="contactSubmitBtn" class="btn-primary" type="button" style="width:100%;padding:18px;">Odeslat zprávu</button>
+      <p id="contact-error" class="form-error" style="display:none;margin-top:12px;"></p>
     </div>
 
   </div>
@@ -962,8 +952,8 @@
     services: {
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
       video:   { label: 'Video (vč. dronu)',      price: 10700 },
-      reels:   { label: 'Reels',                  price: 4700 },
-      pudorys: { label: 'Půdorysy',               pricePerFloor: 850 }
+      reels:   { label: 'Reels',                  price: 5400 },
+      pudorys: { label: 'Půdorysy',               pricePerFloor: 900 }
     }
   };
 
@@ -1011,70 +1001,6 @@
   document.getElementById('lightboxClose').addEventListener('click', function () { document.getElementById('lightbox').classList.remove('open'); });
   document.getElementById('lightbox').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); });
-
-  /* ══════════════════════════════════════
-     DATE PICKER — only Tue/Fri/Sun
-  ══════════════════════════════════════ */
-  // ── CUSTOM CALENDAR
-  var calState = { year: 0, month: 0 };
-  var CZ_MONTHS = ['Leden','Únor','Březen','Duben','Květen','Červen',
-                   'Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
-
-  function renderCalendar(year, month) {
-    calState.year = year; calState.month = month;
-    document.getElementById('calMonthLabel').textContent = CZ_MONTHS[month] + ' ' + year;
-    var today = new Date(); today.setHours(0,0,0,0);
-    var tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-    var firstDay = new Date(year, month, 1).getDay(); // 0=Sun
-    // Convert to Mon-first: Mon=0..Sun=6
-    var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
-    var daysInMonth = new Date(year, month + 1, 0).getDate();
-    var html = '';
-    for (var i = 0; i < startOffset; i++) html += '<div class="cal-day empty"></div>';
-    for (var d = 1; d <= daysInMonth; d++) {
-      var date = new Date(year, month, d);
-      var dow = date.getDay(); // 0=Sun,2=Tue,5=Fri
-      var isAvail = (dow === 0 || dow === 2 || dow === 5) && date >= tomorrow;
-      var isPast  = date < tomorrow;
-      var selVal  = document.getElementById('q-date').value;
-      var thisVal = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-      var cls = 'cal-day';
-      if (isAvail) cls += ' available';
-      else if (isPast) cls += ' past';
-      if (selVal === thisVal) cls += ' selected';
-      html += '<div class="' + cls + '" data-date="' + thisVal + '">' + d + '</div>';
-    }
-    document.getElementById('calDays').innerHTML = html;
-    // bind clicks
-    document.querySelectorAll('#calDays .cal-day.available').forEach(function(el) {
-      el.addEventListener('click', function() {
-        document.getElementById('q-date').value = this.dataset.date;
-        var parts = this.dataset.date.split('-');
-        var months = ['ledna','února','března','dubna','května','června',
-                      'července','srpna','září','října','listopadu','prosince'];
-        var dayNames = ['neděle','pondělí','úterý','středa','čtvrtek','pátek','sobota'];
-        var dt = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-        document.getElementById('calSelected').textContent =
-          '✓ ' + dayNames[dt.getDay()] + ' ' + parseInt(parts[2]) + '. ' + months[parseInt(parts[1])-1] + ' ' + parts[0];
-        renderCalendar(calState.year, calState.month);
-      });
-    });
-  }
-
-  // Init calendar to next month if current has few days left
-  var initDate = new Date(); initDate.setDate(initDate.getDate() + 1);
-  renderCalendar(initDate.getFullYear(), initDate.getMonth());
-
-  document.getElementById('calPrev').addEventListener('click', function() {
-    var d = new Date(calState.year, calState.month - 1, 1);
-    var today = new Date();
-    if (d.getFullYear() < today.getFullYear() || (d.getFullYear() === today.getFullYear() && d.getMonth() < today.getMonth())) return;
-    renderCalendar(d.getFullYear(), d.getMonth());
-  });
-  document.getElementById('calNext').addEventListener('click', function() {
-    var d = new Date(calState.year, calState.month + 1, 1);
-    renderCalendar(d.getFullYear(), d.getMonth());
-  });
 
   /* ══════════════════════════════════════
      FLOORS STEPPER
@@ -1299,70 +1225,122 @@
   /* ══════════════════════════════════════
      FORM SUBMIT — Netlify Forms
   ══════════════════════════════════════ */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function showThankYou(containerSel, heading, body) {
+    document.querySelector(containerSel).innerHTML =
+      '<div class="thankyou">' +
+      '<div class="thankyou-icon">✓</div>' +
+      '<h2>' + heading + '</h2>' +
+      '<p>' + body + '</p>' +
+      '</div>';
+  }
+
+  function submitForm(formData, btn, originalLabel, errEl, onSuccess) {
+    btn.textContent = 'Odesílám…';
+    btn.disabled = true;
+    fetch('/', { method: 'POST', body: formData })
+      .then(function (res) {
+        if (!res.ok) throw new Error('bad status');
+        onSuccess();
+      })
+      .catch(function () {
+        btn.textContent = originalLabel;
+        btn.disabled = false;
+        errEl.innerHTML = 'Odeslání se nezdařilo. Zavolejte nám prosím na ' +
+          '<a href="tel:+420605207392">+420 605 207 392</a> nebo napište na ' +
+          '<a href="mailto:info@indigofilms.cz">info@indigofilms.cz</a>.';
+        errEl.style.display = 'block';
+      });
+  }
+
+  /* ── Nezávazná poptávka (ceník) ── */
+  var requestToggle = document.getElementById('requestToggle');
+  var requestForm   = document.getElementById('requestForm');
+
+  requestToggle.addEventListener('click', function () {
+    requestForm.classList.add('open');
+    requestToggle.style.display = 'none';
+    document.querySelector('.request-hint').style.display = 'none';
+    document.getElementById('q-name').focus();
+  });
+
   document.getElementById('submitBtn').addEventListener('click', function () {
     var name  = document.getElementById('q-name').value.trim();
     var tel   = document.getElementById('q-tel').value.trim();
     var email = document.getElementById('q-email').value.trim();
-    var date  = document.getElementById('q-date').value;
     var addr  = document.getElementById('q-addr').value.trim();
     var note  = document.getElementById('q-note').value.trim();
     var errEl = document.getElementById('form-error');
 
-    // Validate
     var services = [];
     if (document.getElementById('svc-foto').checked)    services.push('Fotografie');
     if (document.getElementById('svc-video').checked)   services.push('Video');
     if (document.getElementById('svc-reels').checked)   services.push('Reels');
     if (document.getElementById('svc-pudorys').checked) services.push('Půdorysy (' + state.floors + ' patr' + (state.floors===1?'o':state.floors<5?'a':'er') + ')');
 
-    if (!name || !tel || !email || !date || !addr || services.length === 0) {
-      errEl.textContent = 'Vyplňte prosím všechna povinná pole a vyberte alespoň jednu službu.';
+    if (!name || !tel || !email) {
+      errEl.textContent = 'Vyplňte prosím jméno, telefon a e-mail.';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (services.length === 0) {
+      errEl.textContent = 'Vyberte prosím alespoň jednu službu v ceníku výše.';
       errEl.style.display = 'block';
       return;
     }
     errEl.style.display = 'none';
 
-    // Build price summary string for email
-    var totalExEl  = document.getElementById('total-ex').textContent;
-    var totalIncEl = document.getElementById('total-inc').textContent;
-
-    // Send via Netlify Forms (works automatically when deployed to Netlify)
     var formData = new FormData();
-    formData.append('form-name',  'poptavka');
-    formData.append('Jméno',      name);
-    formData.append('Telefon',    tel);
-    formData.append('Email',      email);
-    formData.append('Datum',      date);
-    formData.append('Adresa',     addr);
-    formData.append('Služby',     services.join(', '));
-    formData.append('Vzdálenost', state.distanceKm ? state.distanceKm + ' km (tam+zpět)' : 'neuvedena');
-    formData.append('Cena bez DPH', totalExEl);
-    formData.append('Cena s DPH',   totalIncEl);
-    formData.append('Poznámka',   note);
+    formData.append('form-name',    'poptavka');
+    formData.append('Jméno',        name);
+    formData.append('Telefon',      tel);
+    formData.append('Email',        email);
+    formData.append('Adresa',       addr || 'neuvedena');
+    formData.append('Služby',       services.join(', '));
+    formData.append('Vzdálenost',   state.distanceKm ? state.distanceKm + ' km (tam+zpět)' : 'neuvedena');
+    formData.append('Cena bez DPH', document.getElementById('total-ex').textContent);
+    formData.append('Cena s DPH',   document.getElementById('total-inc').textContent);
+    formData.append('Poznámka',     note);
 
-    var btn = document.getElementById('submitBtn');
-    btn.textContent = 'Odesílám…';
-    btn.disabled = true;
+    submitForm(formData, this, 'Odeslat poptávku', errEl, function () {
+      showThankYou('.quote-layout', 'Poptávka odeslána!',
+        'Děkujeme, <strong>' + esc(name) + '</strong>. Ozveme se vám co nejdříve na <strong>' +
+        esc(email) + '</strong> nebo telefonicky na <strong>' + esc(tel) + '</strong>.');
+    });
+  });
 
-    fetch('/', { method: 'POST', body: formData })
-      .then(function () {
-        // Success — show thank-you
-        document.querySelector('.quote-layout').innerHTML =
-          '<div class="thankyou">' +
-          '<div class="thankyou-icon">✓</div>' +
-          '<h2>Poptávka odeslána!</h2>' +
-          '<p>Děkujeme, <strong>' + name + '</strong>. Ozveme se vám co nejdříve na <strong>' + email + '</strong> nebo telefonicky na <strong>' + tel + '</strong> s potvrzením termínu.</p>' +
-          '</div>';
-      })
-      .catch(function () {
-        // Fallback if fetch fails (e.g. local preview)
-        document.querySelector('.quote-layout').innerHTML =
-          '<div class="thankyou">' +
-          '<div class="thankyou-icon">✓</div>' +
-          '<h2>Poptávka odeslána!</h2>' +
-          '<p>Děkujeme, <strong>' + name + '</strong>. Ozveme se vám co nejdříve.</p>' +
-          '</div>';
-      });
+  /* ── Kontaktní formulář ── */
+  document.getElementById('contactSubmitBtn').addEventListener('click', function () {
+    var name  = document.getElementById('c-name').value.trim();
+    var tel   = document.getElementById('c-tel').value.trim();
+    var email = document.getElementById('c-email').value.trim();
+    var msg   = document.getElementById('c-msg').value.trim();
+    var errEl = document.getElementById('contact-error');
+
+    if (!name || !email || !msg) {
+      errEl.textContent = 'Vyplňte prosím jméno, e-mail a zprávu.';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    var formData = new FormData();
+    formData.append('form-name', 'kontakt');
+    formData.append('Jméno',     name);
+    formData.append('Email',     email);
+    formData.append('Telefon',   tel || 'neuveden');
+    formData.append('Zpráva',    msg);
+
+    submitForm(formData, this, 'Odeslat zprávu', errEl, function () {
+      showThankYou('.contact-layout', 'Zpráva odeslána!',
+        'Děkujeme, <strong>' + esc(name) + '</strong>. Ozveme se vám co nejdříve na <strong>' +
+        esc(email) + '</strong>.');
+    });
   });
 
   /* ── init ── */
