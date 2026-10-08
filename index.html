@@ -668,9 +668,9 @@
     <p class="page-perex">Video musí pracovat s emocí, s hlasem makléře a s příběhem nemovitosti. Krom samotné prezentace prostor slouží videoprohlídka také jako skvělý nástroj propagace makléře samotného.</p>
   </div>
   <div class="video-grid">
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/KrReu1unP-I" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
     <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/HPqmiXSYI14" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
     <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/vhdHGTT_YLc" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/KrReu1unP-I" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
     <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/dxmRzJIBKd0" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
     <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/I6f3z9_1cQ8" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
     <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/2GlXtp9AQbE" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
@@ -742,7 +742,7 @@
           <input type="checkbox" id="svc-video" value="video">
           <span class="check-box"></span>
           <span class="check-body">
-            <span class="check-name">Video <span class="check-note">vč. dronu</span></span>
+            <span class="check-name">Videoprohlídka <span class="check-note">vč. dronu</span></span>
             <span class="check-price">12 700 Kč</span>
           </span>
         </label>
@@ -750,8 +750,8 @@
           <input type="checkbox" id="svc-reels" value="reels">
           <span class="check-box"></span>
           <span class="check-body">
-            <span class="check-name">Reels</span>
-            <span class="check-price">5 400 Kč</span>
+            <span class="check-name">2x Reels nemovitosti <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">12 700 Kč</span>
           </span>
         </label>
         <label class="check-item">
@@ -952,8 +952,8 @@
     notifyEmail: 'matous.ondrej@gmail.com',
     services: {
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
-      video:   { label: 'Video (vč. dronu)',      price: 12700 },
-      reels:   { label: 'Reels',                  price: 5400 },
+      video:   { label: 'Videoprohlídka (vč. dronu)',      price: 12700 },
+      reels:   { label: '2x Reels nemovitosti (vč. dronu)', price: 12700 },
       pudorys: { label: 'Půdorysy',               pricePerFloor: 900 }
     }
   };
@@ -1280,8 +1280,8 @@
 
     var services = [];
     if (document.getElementById('svc-foto').checked)    services.push('Fotografie');
-    if (document.getElementById('svc-video').checked)   services.push('Video');
-    if (document.getElementById('svc-reels').checked)   services.push('Reels');
+    if (document.getElementById('svc-video').checked)   services.push('Videoprohlídka');
+    if (document.getElementById('svc-reels').checked)   services.push('2x Reels nemovitosti');
     if (document.getElementById('svc-pudorys').checked) services.push('Půdorysy (' + state.floors + ' patr' + (state.floors===1?'o':state.floors<5?'a':'er') + ')');
 
     if (!name || !tel || !email) {
