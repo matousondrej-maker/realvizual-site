@@ -449,7 +449,9 @@
   .check-body { display: flex; justify-content: space-between; align-items: center; flex: 1; }
   .check-name { font-size: 14px; color: var(--white); }
   .check-note { font-size: 11px; color: var(--muted); margin-left: 8px; }
-  .check-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent); }
+  .check-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--accent); white-space: nowrap; }
+  .check-text { display: flex; flex-direction: column; gap: 6px; padding-right: 16px; }
+  .check-desc { font-size: 12px; line-height: 1.6; color: var(--muted); }
 
   .floors-row {
     display: none;
@@ -739,6 +741,17 @@
           </span>
         </label>
         <label class="check-item">
+          <input type="checkbox" id="svc-dron" value="dron">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Fotografie z dronu <span class="check-note">jen exteriér</span></span>
+              <span class="check-desc">Pro pozemky a místa, kde není potřeba fotit interiér.</span>
+            </span>
+            <span class="check-price">2 018 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
           <input type="checkbox" id="svc-video" value="video">
           <span class="check-box"></span>
           <span class="check-body">
@@ -768,6 +781,25 @@
             <button type="button" id="floors-minus">−</button>
             <span id="floors-val">1</span>
             <button type="button" id="floors-plus">+</button>
+          </div>
+        </div>
+        <label class="check-item">
+          <input type="checkbox" id="svc-studio" value="studio">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Natáčení obsahu na sociální sítě <span class="check-note">ve studiu, 4 300 Kč / hod</span></span>
+              <span class="check-desc">Natočíme vás ve studiu v Brně na dvě kamery, zatímco mluvíte přímo do objektivu. Text máte před sebou ve čtecím zařízení, takže se nic nemusíte učit nazpaměť. V ceně je příprava studia, vložení textů do čtecího zařízení a postprodukce: všechno, co za hodinu natočíme, sestříháme do hotových videí včetně doplňujících záběrů (B-roll).</span>
+            </span>
+            <span class="check-price" id="studio-price">4 300 Kč</span>
+          </span>
+        </label>
+        <div class="floors-row" id="hours-row">
+          <label class="form-label">Počet hodin natáčení</label>
+          <div class="floors-stepper">
+            <button type="button" id="hours-minus">−</button>
+            <span id="hours-val">1</span>
+            <button type="button" id="hours-plus">+</button>
           </div>
         </div>
       </div>
@@ -952,9 +984,11 @@
     notifyEmail: 'matous.ondrej@gmail.com',
     services: {
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
+      dron:    { label: 'Fotografie z dronu', price: 2018 },
       video:   { label: 'Videoprohlídka (vč. dronu)',      price: 12700 },
       reels:   { label: '2x Reels nemovitosti (vč. dronu)', price: 12700 },
-      pudorys: { label: 'Půdorysy',               pricePerFloor: 900 }
+      pudorys: { label: 'Půdorysy',               pricePerFloor: 900 },
+      studio:  { label: 'Natáčení obsahu na sociální sítě ve studiu', pricePerHour: 4300 }
     }
   };
 
@@ -963,6 +997,7 @@
   ══════════════════════════════════════ */
   var state = {
     floors: 1,
+    hours: 1,
     distanceKm: null,
     distanceText: '',
     geocoding: false
@@ -1021,10 +1056,23 @@
     if (state.floors < 10) { state.floors++; document.getElementById('floors-val').textContent = state.floors; updateSummary(); }
   });
 
+  var studioCheck = document.getElementById('svc-studio');
+  var hoursRow    = document.getElementById('hours-row');
+  studioCheck.addEventListener('change', function () {
+    hoursRow.style.display = this.checked ? 'flex' : 'none';
+    updateSummary();
+  });
+  document.getElementById('hours-minus').addEventListener('click', function () {
+    if (state.hours > 1) { state.hours--; document.getElementById('hours-val').textContent = state.hours; updateSummary(); }
+  });
+  document.getElementById('hours-plus').addEventListener('click', function () {
+    if (state.hours < 10) { state.hours++; document.getElementById('hours-val').textContent = state.hours; updateSummary(); }
+  });
+
   /* ══════════════════════════════════════
      SERVICE CHECKBOXES → update summary
   ══════════════════════════════════════ */
-  ['svc-foto','svc-video','svc-reels','svc-pudorys'].forEach(function (id) {
+  ['svc-foto','svc-dron','svc-video','svc-reels','svc-pudorys'].forEach(function (id) {
     document.getElementById(id).addEventListener('change', updateSummary);
   });
 
@@ -1174,7 +1222,8 @@
     var total  = 0;
 
     // Services
-    var svcMap = { foto: 'svc-foto', video: 'svc-video', reels: 'svc-reels', pudorys: 'svc-pudorys' };
+    var svcMap = { foto: 'svc-foto', dron: 'svc-dron', video: 'svc-video', reels: 'svc-reels', pudorys: 'svc-pudorys', studio: 'svc-studio' };
+    var onSiteTotal = 0;
     Object.keys(svcMap).forEach(function (key) {
       if (document.getElementById(svcMap[key]).checked) {
         var svc = CONFIG.services[key];
@@ -1184,18 +1233,23 @@
           lines.push({ label: svc.label + ' (' + state.floors + (state.floors === 1 ? ' patro' : state.floors < 5 ? ' patra' : ' pater') + ')', price: price });
           // update checkbox price label
           document.getElementById('pudorys-price').textContent = fmt(price);
+        } else if (key === 'studio') {
+          price = svc.pricePerHour * state.hours;
+          lines.push({ label: svc.label + ' (' + state.hours + (state.hours === 1 ? ' hodina' : state.hours < 5 ? ' hodiny' : ' hodin') + ')', price: price });
+          document.getElementById('studio-price').textContent = fmt(price);
         } else {
           price = svc.price;
           lines.push({ label: svc.label, price: price });
         }
         total += price;
+        if (key !== 'studio') onSiteTotal += price;
       }
     });
 
     // Transport
     var transportEl = document.getElementById('transport-info');
     var transportText = document.getElementById('transport-text');
-    if (state.distanceKm !== null && total > 0) {
+    if (state.distanceKm !== null && onSiteTotal > 0) {
       var transportCost = state.distanceKm * CONFIG.kmPrice;
       total += transportCost;
       lines.push({ label: 'Doprava (' + state.distanceKm + ' km × ' + CONFIG.kmPrice + ' Kč)', price: transportCost });
@@ -1280,9 +1334,11 @@
 
     var services = [];
     if (document.getElementById('svc-foto').checked)    services.push('Fotografie');
+    if (document.getElementById('svc-dron').checked)    services.push('Fotografie z dronu');
     if (document.getElementById('svc-video').checked)   services.push('Videoprohlídka');
     if (document.getElementById('svc-reels').checked)   services.push('2x Reels nemovitosti');
     if (document.getElementById('svc-pudorys').checked) services.push('Půdorysy (' + state.floors + ' patr' + (state.floors===1?'o':state.floors<5?'a':'er') + ')');
+    if (document.getElementById('svc-studio').checked)  services.push('Natáčení ve studiu (' + state.hours + ' h)');
 
     if (!name || !tel || !email) {
       errEl.textContent = 'Vyplňte prosím jméno, telefon a e-mail.';
