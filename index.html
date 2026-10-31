@@ -565,6 +565,33 @@
   @media (max-width:900px) { .reels-grid { grid-template-columns:repeat(2,1fr); } }
   @media (max-width:600px) { .reels-grid { grid-template-columns:1fr; } }
 
+  /* YouTube: ostrý náhled, přehrávač až po kliknutí */
+  .yt { position:relative; cursor:pointer; overflow:hidden; }
+  .yt img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease, filter .4s; filter:brightness(.85); }
+  .yt:hover img { transform:scale(1.03); filter:brightness(1); }
+  .yt-play { position:absolute; left:50%; top:50%; width:64px; height:64px; margin:-32px 0 0 -32px; border-radius:50%; border:1.5px solid rgba(255,255,255,.85); background:rgba(8,8,8,.35); transition:background .25s, border-color .25s; }
+  .yt-play::after { content:''; position:absolute; left:26px; top:21px; border-style:solid; border-width:11px 0 11px 18px; border-color:transparent transparent transparent #fff; }
+  .yt:hover .yt-play { background:var(--accent); border-color:var(--accent); }
+
+  /* nabídky (Reels, Videa na sítě) */
+  .offer { display:grid; grid-template-columns:minmax(280px,380px) 1fr; gap:60px; padding:80px 60px; border-bottom:1px solid var(--border); align-items:start; }
+  .offer-num { font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:300; color:var(--border); line-height:1; margin-bottom:16px; }
+  .offer-title { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:400; color:var(--white); line-height:1.15; }
+  .offer-price { font-family:'Cormorant Garamond',serif; font-size:30px; color:var(--accent); margin:14px 0 22px; white-space:nowrap; }
+  .offer-price span { font-family:inherit; font-size:14px; color:var(--muted); margin-left:6px; }
+  .offer-desc { font-size:14px; color:var(--muted); line-height:1.8; }
+  .offer-list { list-style:none; margin:24px 0 0; padding:0; }
+  .offer-list li { font-size:13px; color:rgba(255,255,255,.75); padding:10px 0 10px 22px; border-top:1px solid var(--border); position:relative; }
+  .offer-list li::before { content:'—'; position:absolute; left:0; color:var(--accent); }
+  .offer-cta { display:inline-block; margin-top:32px; }
+  .offer-samples { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
+  .step { background:var(--surface); padding:48px 36px; }
+  .step-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; color:var(--white); margin-bottom:12px; }
+  .step-desc { font-size:14px; color:var(--muted); line-height:1.8; }
+  @media (max-width:1100px) { .steps { grid-template-columns:repeat(2,1fr); } .offer { grid-template-columns:1fr; gap:40px; } }
+  @media (max-width:600px) { .offer { padding:56px 20px; } .steps { grid-template-columns:1fr; } .step { padding:36px 20px; } .offer-samples { grid-template-columns:repeat(2,1fr); } }
+
 
   /* gaps between video items and plan items */
   .video-grid { gap: 12px; padding: 12px; }
@@ -594,6 +621,7 @@
     <li><a data-nav="fotografie">Fotografie</a></li>
     <li><a data-nav="video">Video</a></li>
     <li><a data-nav="reels">Reels</a></li>
+    <li><a data-nav="site">Videa na sítě</a></li>
     <li><a data-nav="pudorys">Půdorys</a></li>
     <li><a data-nav="cenik">Ceník</a></li>
     <li><a data-nav="kontakt" class="nav-cta">Kontakt</a></li>
@@ -609,6 +637,7 @@
   <a data-nav="fotografie">Fotografie</a>
   <a data-nav="video">Video</a>
   <a data-nav="reels">Reels</a>
+  <a data-nav="site">Videa na sítě</a>
   <a data-nav="pudorys">Půdorys</a>
   <a data-nav="cenik">Ceník</a>
   <a data-nav="kontakt">Kontakt</a>
@@ -670,12 +699,12 @@
     <p class="page-perex">Video musí pracovat s emocí, s hlasem makléře a s příběhem nemovitosti. Krom samotné prezentace prostor slouží videoprohlídka také jako skvělý nástroj propagace makléře samotného.</p>
   </div>
   <div class="video-grid">
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/HPqmiXSYI14" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/vhdHGTT_YLc" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/KrReu1unP-I" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/dxmRzJIBKd0" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/I6f3z9_1cQ8" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="video-item"><div class="video-embed"><iframe src="https://www.youtube.com/embed/2GlXtp9AQbE" title="RealVizual" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="HPqmiXSYI14"><img src="https://i.ytimg.com/vi/HPqmiXSYI14/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="vhdHGTT_YLc"><img src="https://i.ytimg.com/vi/vhdHGTT_YLc/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="KrReu1unP-I"><img src="https://i.ytimg.com/vi/KrReu1unP-I/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="dxmRzJIBKd0"><img src="https://i.ytimg.com/vi/dxmRzJIBKd0/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="I6f3z9_1cQ8"><img src="https://i.ytimg.com/vi/I6f3z9_1cQ8/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
+    <div class="video-item"><div class="video-embed yt" data-yt="2GlXtp9AQbE"><img src="https://i.ytimg.com/vi/2GlXtp9AQbE/maxresdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></div></div>
   </div>
 </section>
 
@@ -683,14 +712,73 @@
 <section id="reels">
   <div class="page-header" data-label="Reels">
     <div class="page-tag">Sociální sítě</div>
-    <h1 class="page-title">Reels &amp;<br>krátká videa</h1>
-    <p class="page-perex">Krátký vertikální obsah pro Instagram, Facebook a TikTok. Ideální formát pro rychlé oslovení co největšího počtu potenciálních kupujících na sociálních sítích – tam, kde tráví čas každý den.</p>
+    <h1 class="page-title">Reels<br>nemovitostí</h1>
+    <p class="page-perex">Krátká vertikální videa pro Instagram, Facebook a TikTok. Právě tam dnes lidé tráví čas každý den a dobrý reel osloví i ty, kdo zrovna nemovitost aktivně nehledají. Nabízíme dva formáty: filmový reel, který prodává atmosférou, a komentovaný průchod, ve kterém nemovitost představíte vy sami.</p>
   </div>
-  <div class="reels-grid">
-    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/7Cq4s-nLP7s" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/4lohk9yCQ-Q" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/6tah0KvQj0M" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
-    <div class="reel-item"><div class="reel-embed"><iframe src="https://www.youtube.com/embed/is_6fDOfCec" title="RealVizual Reel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+
+  <div class="offer">
+    <div class="offer-info">
+      <div class="offer-num">01</div>
+      <h2 class="offer-title">Filmové reels</h2>
+      <div class="offer-price">7 800 Kč <span>vč. dronu</span></div>
+      <p class="offer-desc">Dynamické video střižené do rytmu hudby. Pracuje s atmosférou a emocí, zaujme během prvních vteřin a ukáže nemovitost v tom nejlepším světle.</p>
+      <ul class="offer-list">
+        <li>plynulé pohyby kamery a záběry z dronu</li>
+        <li>střih do rytmu hudby</li>
+        <li>vhodné pro organický dosah i placenou reklamu</li>
+      </ul>
+    </div>
+    <div class="offer-samples">
+      <div class="reel-item"><div class="reel-embed yt" data-yt="68_qYsHjpTY"><img src="https://i.ytimg.com/vi/68_qYsHjpTY/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/68_qYsHjpTY/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+      <div class="reel-item"><div class="reel-embed yt" data-yt="rIddQPgZR6E"><img src="https://i.ytimg.com/vi/rIddQPgZR6E/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/rIddQPgZR6E/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+      <div class="reel-item"><div class="reel-embed yt" data-yt="f5cR-Sq04WQ"><img src="https://i.ytimg.com/vi/f5cR-Sq04WQ/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/f5cR-Sq04WQ/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+    </div>
+  </div>
+
+  <div class="offer">
+    <div class="offer-info">
+      <div class="offer-num">02</div>
+      <h2 class="offer-title">Komentovaný průchod</h2>
+      <div class="offer-price">2 300 Kč</div>
+      <p class="offer-desc">Makléř provede diváka nemovitostí a sám ji komentuje, obvykle v jednom souvislém záběru. Působí autenticky a osobně, jako by divák byl na prohlídce s vámi. Rychlý a cenově dostupný formát, který zároveň buduje vaši osobní značku.</p>
+      <ul class="offer-list">
+        <li>obvykle jeden souvislý záběr</li>
+        <li>vaše tvář a váš komentář</li>
+        <li>ideální doplněk k fotkám nebo videoprohlídce</li>
+      </ul>
+    </div>
+    <div class="offer-samples">
+      <div class="reel-item"><div class="reel-embed yt" data-yt="m0T12qFbwGM"><img src="https://i.ytimg.com/vi/m0T12qFbwGM/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/m0T12qFbwGM/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEA NA SÍTĚ -->
+<section id="site">
+  <div class="page-header" data-label="Sítě">
+    <div class="page-tag">Pro makléře</div>
+    <h1 class="page-title">Videa na sítě<br>z ateliéru</h1>
+    <p class="page-perex">Pravidelná videa na sociálních sítích budují vaši značku a přivádějí nové klienty. Jejich natáčení ale zabere spoustu času. U nás to zvládnete na jedno posezení: připravíte si texty, přijdete do ateliéru v Brně a o zbytek se postaráme my. Odnesete si hotová videa na několik týdnů dopředu.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="offer-num">01</div><h3 class="step-title">Připravíte texty</h3><p class="step-desc">Napíšete si, o čem chcete mluvit. Tipy pro prodávající, situace na trhu, představení vás nebo konkrétní nemovitosti.</p></div>
+    <div class="step"><div class="offer-num">02</div><h3 class="step-title">Nachystáme scénu</h3><p class="step-desc">V ateliéru připravíme světla, zvuk a pozadí. Vaše texty nahrajeme do čtecího zařízení před kamerou.</p></div>
+    <div class="step"><div class="offer-num">03</div><h3 class="step-title">Natočíme na dvě kamery</h3><p class="step-desc">Mluvíte přímo do objektivu a text čtete ze čtecího zařízení, nic se neučíte nazpaměť. Dvě kamery dodají videu dynamiku.</p></div>
+    <div class="step"><div class="offer-num">04</div><h3 class="step-title">Sestříháme hotová videa</h3><p class="step-desc">Všechno natočené sestříháme do vertikálních videí připravených ke zveřejnění. Doplníme podkladové záběry, které téma dokreslí.</p></div>
+  </div>
+
+  <div class="offer">
+    <div class="offer-info">
+      <h2 class="offer-title">Cena</h2>
+      <div class="offer-price">4 300 Kč <span>za hodinu natáčení</span></div>
+      <p class="offer-desc">V ceně je příprava ateliéru, vložení textů do čtecího zařízení a kompletní postprodukce. Co za hodinu natočíme, to v ceně i sestříháme.</p>
+      <span class="btn-primary offer-cta" data-nav="cenik">Nezávazná poptávka</span>
+    </div>
+    <div class="offer-samples">
+      <div class="reel-item"><div class="reel-embed yt" data-yt="j4pfHnIlkYA"><img src="https://i.ytimg.com/vi/j4pfHnIlkYA/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/j4pfHnIlkYA/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+      <div class="reel-item"><div class="reel-embed yt" data-yt="QZpobZ-R-mc"><img src="https://i.ytimg.com/vi/QZpobZ-R-mc/oar2.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/QZpobZ-R-mc/hqdefault.jpg'"><span class="yt-play" aria-hidden="true"></span></div></div>
+    </div>
   </div>
 </section>
 
@@ -763,8 +851,19 @@
           <input type="checkbox" id="svc-reels" value="reels">
           <span class="check-box"></span>
           <span class="check-body">
-            <span class="check-name">2x Reels nemovitosti <span class="check-note">vč. dronu</span></span>
-            <span class="check-price">12 700 Kč</span>
+            <span class="check-name">Filmové reels <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">7 800 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-pruchod" value="pruchod">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Komentovaný průchod <span class="check-note">reels</span></span>
+              <span class="check-desc">Makléř provede nemovitostí a komentuje ji, obvykle v jednom záběru.</span>
+            </span>
+            <span class="check-price">2 300 Kč</span>
           </span>
         </label>
         <label class="check-item">
@@ -788,8 +887,8 @@
           <span class="check-box"></span>
           <span class="check-body">
             <span class="check-text">
-              <span class="check-name">Natáčení obsahu na sociální sítě <span class="check-note">ve studiu, 4 300 Kč / hod</span></span>
-              <span class="check-desc">Natočíme vás ve studiu v Brně na dvě kamery, zatímco mluvíte přímo do objektivu. Text máte před sebou ve čtecím zařízení, takže se nic nemusíte učit nazpaměť. V ceně je příprava studia, vložení textů do čtecího zařízení a postprodukce: všechno, co za hodinu natočíme, sestříháme do hotových videí včetně doplňujících záběrů (B-roll).</span>
+              <span class="check-name">Videa na sítě z ateliéru <span class="check-note">4 300 Kč / hod</span></span>
+              <span class="check-desc">Natáčení se čtecím zařízením na dvě kamery v ateliéru v Brně. V ceně příprava, vložení textů a střih všeho natočeného do hotových videí s podkladovými záběry.</span>
             </span>
             <span class="check-price" id="studio-price">4 300 Kč</span>
           </span>
@@ -986,9 +1085,10 @@
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
       dron:    { label: 'Fotografie z dronu', price: 2800 },
       video:   { label: 'Videoprohlídka (vč. dronu)',      price: 12700 },
-      reels:   { label: '2x Reels nemovitosti (vč. dronu)', price: 12700 },
+      reels:   { label: 'Filmové reels (vč. dronu)', price: 7800 },
+      pruchod: { label: 'Komentovaný průchod (reels)', price: 2300 },
       pudorys: { label: 'Půdorysy',               pricePerFloor: 900 },
-      studio:  { label: 'Natáčení obsahu na sociální sítě ve studiu', pricePerHour: 4300 }
+      studio:  { label: 'Videa na sítě z ateliéru', pricePerHour: 4300 }
     }
   };
 
@@ -1019,6 +1119,20 @@
   document.addEventListener('click', function (e) {
     var target = e.target.closest('[data-nav]');
     if (target) { e.preventDefault(); showPage(target.getAttribute('data-nav')); }
+  });
+
+  // YouTube: přehrávač se načte až po kliknutí na ostrý náhled
+  document.addEventListener('click', function (e) {
+    var box = e.target.closest('.yt[data-yt]');
+    if (!box || box.querySelector('iframe')) return;
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + box.getAttribute('data-yt') + '?autoplay=1&rel=0&playsinline=1';
+    f.title = 'RealVizual video';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    f.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+    box.innerHTML = '';
+    box.appendChild(f);
   });
 
   document.getElementById('hamburger').addEventListener('click', function () {
@@ -1072,7 +1186,7 @@
   /* ══════════════════════════════════════
      SERVICE CHECKBOXES → update summary
   ══════════════════════════════════════ */
-  ['svc-foto','svc-dron','svc-video','svc-reels','svc-pudorys'].forEach(function (id) {
+  ['svc-foto','svc-dron','svc-video','svc-reels','svc-pruchod','svc-pudorys'].forEach(function (id) {
     document.getElementById(id).addEventListener('change', updateSummary);
   });
 
@@ -1222,7 +1336,7 @@
     var total  = 0;
 
     // Services
-    var svcMap = { foto: 'svc-foto', dron: 'svc-dron', video: 'svc-video', reels: 'svc-reels', pudorys: 'svc-pudorys', studio: 'svc-studio' };
+    var svcMap = { foto: 'svc-foto', dron: 'svc-dron', video: 'svc-video', reels: 'svc-reels', pruchod: 'svc-pruchod', pudorys: 'svc-pudorys', studio: 'svc-studio' };
     var onSiteTotal = 0;
     Object.keys(svcMap).forEach(function (key) {
       if (document.getElementById(svcMap[key]).checked) {
@@ -1336,9 +1450,10 @@
     if (document.getElementById('svc-foto').checked)    services.push('Fotografie');
     if (document.getElementById('svc-dron').checked)    services.push('Fotografie z dronu');
     if (document.getElementById('svc-video').checked)   services.push('Videoprohlídka');
-    if (document.getElementById('svc-reels').checked)   services.push('2x Reels nemovitosti');
+    if (document.getElementById('svc-reels').checked)   services.push('Filmové reels');
+    if (document.getElementById('svc-pruchod').checked) services.push('Komentovaný průchod');
     if (document.getElementById('svc-pudorys').checked) services.push('Půdorysy (' + state.floors + ' patr' + (state.floors===1?'o':state.floors<5?'a':'er') + ')');
-    if (document.getElementById('svc-studio').checked)  services.push('Natáčení ve studiu (' + state.hours + ' h)');
+    if (document.getElementById('svc-studio').checked)  services.push('Videa na sítě z ateliéru (' + state.hours + ' h)');
 
     if (!name || !tel || !email) {
       errEl.textContent = 'Vyplňte prosím jméno, telefon a e-mail.';
