@@ -3,3 +3,75 @@
   [headers.values]
     Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:;"
     X-Frame-Options = "SAMEORIGIN"
+
+# Vlastní adresy sekcí – všechny servíruje index.html, sekci otevře skript podle adresy
+
+[[redirects]]
+  from = "/fotografie"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/fotografie/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/video"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/video/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/reels"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/reels/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/videa-na-site"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/videa-na-site/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/pudorys"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/pudorys/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/cenik"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/cenik/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/kontakt"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/kontakt/"
+  to = "/index.html"
+  status = 200

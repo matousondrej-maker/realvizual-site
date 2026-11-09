@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -1113,7 +1114,21 @@
   /* ══════════════════════════════════════
      NAVIGATION
   ══════════════════════════════════════ */
-  function showPage(id) {
+  // Každá sekce má vlastní adresu (realvizual.cz/reels apod.)
+  var ROUTES = { uvod: '/', fotografie: '/fotografie', video: '/video', reels: '/reels', site: '/videa-na-site', pudorys: '/pudorys', cenik: '/cenik', kontakt: '/kontakt' };
+  var TITLES = { uvod: 'RealVizual – Prezentace nemovitostí', fotografie: 'Fotografie nemovitostí | RealVizual', video: 'Videoprohlídky nemovitostí | RealVizual', reels: 'Reels nemovitostí | RealVizual', site: 'Videa na sítě z ateliéru | RealVizual', pudorys: 'Půdorysy nemovitostí | RealVizual', cenik: 'Ceník | RealVizual', kontakt: 'Kontakt | RealVizual' };
+  function pageFromPath(path) {
+    path = path.replace(/\/+$/, '') || '/';
+    for (var k in ROUTES) { if (ROUTES[k] === path) return k; }
+    return 'uvod';
+  }
+  document.querySelectorAll('a[data-nav]').forEach(function (a) { if (ROUTES[a.getAttribute('data-nav')]) a.setAttribute('href', ROUTES[a.getAttribute('data-nav')]); });
+
+  function showPage(id, fromHistory) {
+    if (ROUTES[id]) {
+      document.title = TITLES[id];
+      if (!fromHistory && location.pathname !== ROUTES[id]) history.pushState({ page: id }, '', ROUTES[id]);
+    }
     document.querySelectorAll('section').forEach(function (s) { s.classList.remove('active'); });
     var el = document.getElementById(id);
     if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
@@ -1123,8 +1138,11 @@
     document.getElementById('mobileMenu').classList.remove('open');
   }
 
+  window.addEventListener('popstate', function () { showPage(pageFromPath(location.pathname), true); });
+
   document.addEventListener('click', function (e) {
     var target = e.target.closest('[data-nav]');
+    if (target && (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) && target.getAttribute('href')) return;
     if (target) { e.preventDefault(); showPage(target.getAttribute('data-nav')); }
   });
 
@@ -1538,7 +1556,7 @@
   });
 
   /* ── init ── */
-  showPage('uvod');
+  showPage(pageFromPath(location.pathname), true);
 }());
 </script>
 </body>
