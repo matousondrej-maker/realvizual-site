@@ -1,0 +1,71 @@
+<div class="page-header" data-label="Kontakt">
+    <div class="page-tag">Spojte se se mnou</div>
+    <h1 class="page-title">Kontakt</h1>
+    <p class="page-perex">Zavolejte, napište na WhatsApp nebo e-mail, případně použijte formulář níže. Ozvu se vám co nejdříve.</p>
+  </div>
+
+  <!-- Hidden Netlify form for spam detection -->
+  <form name="kontakt" netlify netlify-honeypot="bot-field" hidden>
+    <input name="Jméno"/><input name="Email"/><input name="Telefon"/><textarea name="Zpráva"></textarea>
+  </form>
+
+  <div class="contact-layout">
+
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-label">Telefon</div>
+        <a class="contact-value" href="tel:+420605207392">+420 605 207 392</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">WhatsApp</div>
+        <a class="contact-value" href="https://wa.me/@@WA@@" target="_blank" rel="noopener">Napsat zprávu</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Kam jezdím</div>
+        <span class="contact-value contact-value-sm">Brno a celá jižní Morava, po domluvě i dál. Dopravu spočítá <a href="@@cenik@@" style="color:var(--accent-light)">kalkulačka</a>.</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">E-mail</div>
+        <a class="contact-value" href="mailto:@@EMAIL@@">@@EMAIL@@</a>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Sídlo</div>
+        <span class="contact-value contact-value-sm">Heršpická 813/5, 639 00 Brno<br>M-Palác, 13. patro</span>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Fakturační údaje</div>
+        <dl class="billing">
+          <dt>Společnost</dt><dd>IFVP s.r.o.</dd>
+          <dt>IČ</dt><dd>06967574</dd>
+          <dt>DIČ</dt><dd>CZ06967574</dd>
+          <dt>Bankovní spojení</dt><dd>1152898002/5500</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-section-title">Napište mi</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="c-name">Jméno a příjmení *</label>
+          <input id="c-name" type="text" class="form-input" placeholder="Jan Novák">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="c-tel">Telefon</label>
+          <input id="c-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="c-email">E-mail *</label>
+        <input id="c-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="c-msg">Zpráva *</label>
+        <textarea id="c-msg" class="form-textarea" placeholder="S čím vám můžu pomoct?"></textarea>
+      </div>
+      <button id="contactSubmitBtn" class="btn-primary" type="button" style="width:100%;padding:18px;">Odeslat zprávu</button>
+      <p id="contact-error" class="form-error" style="display:none;margin-top:12px;"></p>
+      <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;">Údaje zpracuji podle <a href="/ochrana-osobnich-udaju" style="color:var(--accent-light)">zásad ochrany osobních údajů</a>.</p>
+    </div>
+
+  </div>

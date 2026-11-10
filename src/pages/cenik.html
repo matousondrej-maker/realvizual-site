@@ -1,0 +1,197 @@
+<div class="page-header" data-label="Ceník">
+    <div class="page-tag">Ceník</div>
+    <h1 class="page-title">Spočítejte si<br>cenu zakázky</h1>
+    <p class="page-perex">Vyberte sestavu nebo jednotlivé služby a zadejte adresu nemovitosti. Cena se spočítá automaticky včetně dopravy z Brna. Kalkulace je orientační a nezávazná.</p>
+  </div>
+
+  <div class="quote-layout">
+
+    <!-- Hidden Netlify form for spam detection -->
+    <form name="poptavka" netlify netlify-honeypot="bot-field" hidden>
+      <input name="Jméno"/><input name="Telefon"/><input name="Email"/>
+      <input name="Adresa"/><input name="Služby"/>
+      <input name="Vzdálenost"/><input name="Cena bez DPH"/><input name="Cena s DPH"/><input name="Poznámka"/>
+    </form>
+
+    <!-- LEFT: calculator -->
+    <div class="quote-form">
+
+      <div class="form-section-title">Doporučené sestavy</div>
+      <div class="presets">
+        <button type="button" class="preset-btn" data-preset="byt">Byt</button>
+        <button type="button" class="preset-btn" data-preset="premium">Dům / byt nad 8 mil.</button>
+        <button type="button" class="preset-btn" data-preset="site">Na sociální sítě</button>
+        <button type="button" class="preset-btn" data-preset="pozemek">Pozemek, chalupa</button>
+        <button type="button" class="preset-btn" data-preset="naklic">Prodej na klíč −10 %</button>
+      </div>
+
+      <div class="form-section-title">Rozsah služeb</div>
+      <div class="services-check">
+        <label class="check-item">
+          <input type="checkbox" id="svc-foto" value="foto">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Fotografie <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">4 300 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-dron" value="dron">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Pozemky a exteriéry <span class="check-note">jen dron</span></span>
+              <span class="check-desc">Fotky z dronu pro pozemky, chalupy a exteriéry bez focení interiéru.</span>
+            </span>
+            <span class="check-price">2 800 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-video" value="video">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Videoprohlídka <span class="check-note">vč. dronu, bonus podklady k inzerátu</span></span>
+            <span class="check-price">12 700 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-reels" value="reels">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Filmové reels <span class="check-note">vč. dronu</span></span>
+            <span class="check-price">7 800 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-pruchod" value="pruchod">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Komentovaný průchod <span class="check-note">doplněk</span></span>
+              <span class="check-desc">Makléř provede nemovitostí a komentuje ji, obvykle v jednom záběru. Natočím ho během stejné návštěvy.</span>
+              <span class="lock-note">Lze přidat k fotografiím nebo videoprohlídce.</span>
+            </span>
+            <span class="check-price">2 300 Kč</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="svc-pudorys" value="pudorys">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-name">Půdorysy <span class="check-note">900 Kč / patro</span></span>
+            <span class="check-price" id="pudorys-price">900 Kč</span>
+          </span>
+        </label>
+        <div class="floors-row" id="floors-row">
+          <label class="form-label" for="q-floors">Počet podlaží</label>
+          <div class="floors-stepper">
+            <button type="button" id="floors-minus">−</button>
+            <span id="floors-val">1</span>
+            <button type="button" id="floors-plus">+</button>
+          </div>
+        </div>
+        <label class="check-item">
+          <input type="checkbox" id="svc-studio" value="studio">
+          <span class="check-box"></span>
+          <span class="check-body">
+            <span class="check-text">
+              <span class="check-name">Videa na sítě z ateliéru <span class="check-note">4 300 Kč / hod</span></span>
+              <span class="check-desc">Natáčení se čtecím zařízením na dvě kamery v ateliéru v Brně. V ceně příprava, vložení textů a střih všeho natočeného do hotových videí s podkladovými záběry.</span>
+            </span>
+            <span class="check-price" id="studio-price">4 300 Kč</span>
+          </span>
+        </label>
+        <div class="floors-row" id="hours-row">
+          <label class="form-label">Počet hodin natáčení</label>
+          <div class="floors-stepper">
+            <button type="button" id="hours-minus">−</button>
+            <span id="hours-val">1</span>
+            <button type="button" id="hours-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="calc-info" id="bundle-note">Tip: <strong>fotografie + videoprohlídka + půdorys + filmové reels</strong> = Prodej na klíč se slevou 10 %. Pro kanceláře od 5 zakázek měsíčně <a href="@@pro-kancelare@@" style="color:var(--accent-light)">rámcová cena −10 %</a>.</p>
+
+      <div class="form-section-title" style="margin-top:36px;">Místo focení</div>
+      <div class="form-group addr-group">
+        <label class="form-label" for="q-addr">Adresa nemovitosti <span class="form-hint">pro výpočet dopravy z Brna</span></label>
+        <input id="q-addr" type="text" class="form-input" placeholder="Náměstí Svobody 1, Brno" autocomplete="off">
+        <div id="addr-suggestions" class="addr-suggestions"></div>
+        <div id="addr-status" class="addr-status"></div>
+      </div>
+
+      <!-- NEZÁVAZNÁ POPTÁVKA -->
+      <div class="request-block">
+        <p class="calc-info"><strong>Obvyklý termín:</strong> natáčení do [DOPLNIT: X] dnů od objednávky, hotové fotky a videa do 7 dnů od natáčení. Výstupy předávám odkazem ke stažení a archivuji je 2 roky.</p>
+        <button id="requestToggle" class="btn-primary" type="button">Nezávazná poptávka</button>
+        <button id="waSend" class="btn-wa" type="button">Poslat kalkulaci na WhatsApp</button>
+        <p class="request-hint">Pošlete mi kalkulaci a já se vám ozvu s potvrzením termínu.</p>
+
+        <div class="request-form" id="requestForm">
+          <div class="form-section-title">Kontaktní údaje</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="q-name">Jméno a příjmení *</label>
+              <input id="q-name" type="text" class="form-input" placeholder="Jan Novák">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="q-tel">Telefon *</label>
+              <input id="q-tel" type="tel" class="form-input" placeholder="+420 700 000 000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="q-email">E-mail *</label>
+            <input id="q-email" type="email" class="form-input" placeholder="jan.novak@email.cz">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="q-note">Poznámka</label>
+            <textarea id="q-note" class="form-textarea" placeholder="Termín, který by vám vyhovoval, nebo cokoli dalšího…"></textarea>
+          </div>
+          <button id="submitBtn" class="btn-primary" type="button" style="width:100%;padding:18px;">Odeslat poptávku</button>
+          <p id="form-error" class="form-error" style="display:none;margin-top:12px;"></p>
+          <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;">Objednávka se řídí <a href="/vop" style="color:var(--accent-light)">obchodními podmínkami</a>. Údaje zpracuji podle <a href="/ochrana-osobnich-udaju" style="color:var(--accent-light)">zásad ochrany osobních údajů</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: price summary -->
+    <div class="quote-summary">
+      <div class="summary-card">
+        <div class="summary-title">Předběžná kalkulace</div>
+
+        <div class="summary-lines" id="summary-lines">
+          <div class="summary-empty">Vyberte služby a adresu nemovitosti.</div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-total-block">
+          <div class="summary-total-label">Celkem bez DPH</div>
+          <div class="summary-total-price" id="total-ex">— Kč</div>
+          <div class="summary-total-vat" id="total-inc">— Kč vč. DPH (21 %)</div>
+        </div>
+
+        <div class="summary-transport" id="transport-info" style="display:none;">
+          <div class="transport-icon">🚗</div>
+          <div id="transport-text"></div>
+        </div>
+
+        <div class="summary-note">
+          Ceny jsou orientační a bez DPH, pokud není uvedeno jinak. Finální cenu potvrdím v nabídce.
+        </div>
+      </div>
+
+      <div class="contact-aside">
+        <div class="contact-item">
+          <div class="contact-label">Raději zavolat?</div>
+          <a class="contact-value" href="tel:+420605207392">+420 605 207 392</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">E-mail</div>
+          <a class="contact-value" href="mailto:@@EMAIL@@">@@EMAIL@@</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
