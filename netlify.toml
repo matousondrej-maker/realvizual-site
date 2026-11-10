@@ -1,77 +1,16 @@
+# Web se generuje příkazem `python3 src/build.py` do složky public/ (výstup je v gitu, Netlify nic nebuilduje)
+[build]
+  publish = "public"
+  command = ""
+
 [[headers]]
   for = "/*"
   [headers.values]
     Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:;"
     X-Frame-Options = "SAMEORIGIN"
 
-# Vlastní adresy sekcí – všechny servíruje index.html, sekci otevře skript podle adresy
-
-[[redirects]]
-  from = "/fotografie"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/fotografie/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/video"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/video/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/reels"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/reels/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/videa-na-site"
-  to = "/index.html"
-  status = 200
-
+# Staré adresy z doby jednostránkového webu
 [[redirects]]
   from = "/videa-na-site/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/pudorys"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/pudorys/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/cenik"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/cenik/"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/kontakt"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/kontakt/"
-  to = "/index.html"
-  status = 200
+  to = "/videa-na-site"
+  status = 301
