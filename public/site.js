@@ -13,7 +13,7 @@
     vatRate:     0.21,
     email:       'info@realvizual.cz',
     whatsapp:    '420605207392',
-    bundleDiscount: 0.10, // Prodej na klíč: foto + video + půdorys + filmové reels
+    bundleDiscount: 0.10, // Prodej na klíč: foto + video + filmové reels
     services: {
       foto:    { label: 'Fotografie (vč. dronu)', price: 4300 },
       dron:    { label: 'Pozemky a exteriéry (dron)', price: 2800 },
@@ -300,11 +300,11 @@
       }
     });
 
-    // Prodej na klíč: foto + video + půdorys + filmové reels se slevou
-    var bundle = ['svc-foto','svc-video','svc-pudorys','svc-reels'].every(function (id) { return document.getElementById(id).checked; });
+    // Prodej na klíč: foto + video + filmové reels se slevou
+    var bundle = ['svc-foto','svc-video','svc-reels'].every(function (id) { return document.getElementById(id).checked; });
     var bundleNote = document.getElementById('bundle-note');
     if (bundle) {
-      var bundleBase = CONFIG.services.foto.price + CONFIG.services.video.price + CONFIG.services.reels.price + CONFIG.services.pudorys.pricePerFloor * state.floors;
+      var bundleBase = CONFIG.services.foto.price + CONFIG.services.video.price + CONFIG.services.reels.price;
       var discount = Math.round(bundleBase * CONFIG.bundleDiscount);
       total -= discount; onSiteTotal -= discount;
       lines.push({ label: 'Sleva Prodej na klíč (−10 %)', price: -discount });
@@ -346,11 +346,11 @@
 
   /* ── Doporučené sestavy: tlačítka a odkazy /cenik?sestava=… ── */
   var PRESETS = {
-    byt:     ['svc-foto', 'svc-pudorys'],
-    premium: ['svc-foto', 'svc-video', 'svc-pudorys'],
+    zaklad:  ['svc-foto'],
+    video:   ['svc-foto', 'svc-video'],
     site:    ['svc-foto', 'svc-reels'],
     pozemek: ['svc-dron'],
-    naklic:  ['svc-foto', 'svc-video', 'svc-pudorys', 'svc-reels']
+    naklic:  ['svc-foto', 'svc-video', 'svc-reels']
   };
   function applyPreset(name) {
     if (!PRESETS[name]) return;
