@@ -268,9 +268,9 @@
     var lines  = [];
     var total  = 0;
 
-    // Komentovaný průchod je jen doplněk k fotkám nebo videu
+    // Komentovaný průchod je jen doplněk k fotkám, videu nebo reels
     var pr = document.getElementById('svc-pruchod');
-    var base = document.getElementById('svc-foto').checked || document.getElementById('svc-video').checked;
+    var base = document.getElementById('svc-foto').checked || document.getElementById('svc-video').checked || document.getElementById('svc-reels').checked;
     pr.disabled = !base;
     if (!base) pr.checked = false;
     pr.closest('.check-item').classList.toggle('locked', !base);
