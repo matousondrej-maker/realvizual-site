@@ -15,7 +15,7 @@ EMAIL = 'info@indigofilms.cz'  # info@realvizual.cz zatím nefunguje
 PHONE = '+420 605 207 392'
 PHONE_RAW = '+420605207392'
 WHATSAPP = '420605207392'
-CLARITY_ID = ''                    # ID projektu z clarity.microsoft.com; prázdné = Clarity se nenačte
+CLARITY_ID = 'zfk8fstymy'                    # ID projektu z clarity.microsoft.com; prázdné = Clarity se nenačte
 INSTAGRAM = 'https://www.instagram.com/realvizual.cz/'
 YOUTUBE = 'https://www.youtube.com/@realvizual'
 YEAR = '2026'
