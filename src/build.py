@@ -11,13 +11,13 @@ SRC, OUT = os.path.join(ROOT, 'src'), os.path.join(ROOT, 'public')
 SITE = 'https://realvizual.cz'
 
 # ── Nastavení ─────────────────────────────────────────────
-EMAIL = 'info@realvizual.cz'      # dřív info@indigofilms.cz – před ostrým nasazením zprovoznit schránku
+EMAIL = 'info@indigofilms.cz'  # info@realvizual.cz zatím nefunguje
 PHONE = '+420 605 207 392'
 PHONE_RAW = '+420605207392'
 WHATSAPP = '420605207392'
 CLARITY_ID = ''                    # ID projektu z clarity.microsoft.com; prázdné = Clarity se nenačte
-INSTAGRAM = ''                     # [DOPLNIT] odkaz na Instagram
-YOUTUBE = ''                       # [DOPLNIT] odkaz na YouTube
+INSTAGRAM = 'https://www.instagram.com/realvizual.cz/'
+YOUTUBE = 'https://www.youtube.com/@realvizual'
 YEAR = '2026'
 
 # ── Stránky: (soubor obsahu, adresa, sekce menu, titulek, popis) ──
@@ -54,8 +54,6 @@ PAGES = [
    'Fotografie vzorových bytů, záběry z dronu a video z průběhu stavby pro prodej developerských projektů.'),
   ('pro-prodavajici', '/jak-pripravit-nemovitost', 'sluzby', 'Jak připravit nemovitost na focení – rady pro prodávající | RealVizual',
    'Praktický návod pro prodávající: jak připravit byt nebo dům na focení a natáčení, aby nemovitost na fotkách vypadala co nejlépe.'),
-  ('novinky',         '/novinky',             'o-mne',   'Co je nového od 1. 1. 2027 | RealVizual',
-   'Novinky v RealVizual od 1. 1. 2027: scénář na míru, verze videa na výšku, podklady k inzerátu a brief pro prodávající.'),
   ('kontakt',         '/kontakt',             'kontakt', 'Kontakt | RealVizual',
    'Telefon, WhatsApp a e-mail. Ondřej Matouš, RealVizual (IFVP s.r.o.), Heršpická 813/5, Brno.'),
 ]
@@ -118,7 +116,7 @@ def footer():
       <a href="tel:{PHONE_RAW}">{PHONE}</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:{EMAIL}">{EMAIL}</a>{soc}</div>
     <div><h4>Služby</h4><a href="{URL['sluzby']}">Přehled služeb</a><a href="{URL['fotografie']}">Fotografie</a><a href="{URL['video']}">Videoprohlídky</a><a href="{URL['reels']}">Reels</a><a href="{URL['pozemky']}">Pozemky a exteriéry</a><a href="{URL['pudorys']}">Půdorysy</a><a href="{URL['site']}">Videa na sítě</a></div>
     <div><h4>Pro koho</h4><a href="{URL['pro-kancelare']}">Realitní kanceláře</a><a href="{URL['pro-developery']}">Developeři</a><a href="{URL['pro-prodavajici']}">Prodávající</a><a href="{URL['cenik']}">Ceník a kalkulačka</a></div>
-    <div><h4>O mně</h4><a href="{URL['o-mne']}">Kdo jsem</a><a href="{URL['reference']}">Reference</a><a href="{URL['jak-to-probiha']}">Jak to probíhá</a><a href="{URL['novinky']}">Novinky 2027</a></div>
+    <div><h4>O mně</h4><a href="{URL['o-mne']}">Kdo jsem</a><a href="{URL['reference']}">Reference</a><a href="{URL['jak-to-probiha']}">Jak to probíhá</a></div>
     <div><h4>Kontakt</h4><a href="{URL['kontakt']}">Napište mi</a><span>IFVP s.r.o.</span><span>IČ 06967574</span><span>Heršpická 813/5, Brno</span></div>
   </div>
   <div class="footer-bottom"><span>© {YEAR} RealVizual / IFVP s.r.o.</span><span><a href="/vop">Obchodní podmínky</a><a href="/ochrana-osobnich-udaju">Ochrana osobních údajů</a></span></div>

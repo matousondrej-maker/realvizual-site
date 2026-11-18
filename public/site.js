@@ -11,7 +11,7 @@
     originLon:   16.6042573,
     kmPrice:     8,        // Kč za každý ujetý km (tam i zpět)
     vatRate:     0.21,
-    email:       'info@realvizual.cz',
+    email:       'info@indigofilms.cz',
     whatsapp:    '420605207392',
     bundleDiscount: 0.10, // Prodej na klíč: foto + video + filmové reels
     services: {
